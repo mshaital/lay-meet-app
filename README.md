@@ -32,6 +32,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 * 项目说明：
 
+```javascript
     类似于微博的移动端应用 建立之初是为了学习nodejs 后来工作之余也不断完善
     目前很多功能没有实现
     还没部署所以不能在线预览
