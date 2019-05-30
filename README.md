@@ -41,7 +41,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 文件结构：
 config 配置文件
 serve
-  config
+  config  
     config.js 服务端项目全局变量缓存文件
   utils
     jwtauth.js token验证中间件
