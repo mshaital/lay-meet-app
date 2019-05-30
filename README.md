@@ -30,16 +30,18 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 ## 项目说明：
-    一个微博类移动端项目可以实现登录注册 发表文章、发表评论、添加收藏、管理员管理等基本功能，项目为业余之间编写功能尚不完善 有问题欢迎指正。
+    一个微博类移动端项目可以实现登录注册 发表文章、发表评论、添加收藏等基本功能
     借鉴了部分微博的设计风格
-    技术说明：
+    项目为业余之间编写功能尚不完善 有问题欢迎指正。
+
+## 技术说明：
     前端页面使用vue vue-cli搭建，css使用了部分bootstrap相关类
     登录方面使用token验证
     后台使用nodejs配合express
     数据库MongoDB
 
 ## 文件结构：
-    config 配置文件
+    public
     serve
       config
         config.js 服务端项目全局变量缓存文件
@@ -64,19 +66,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
       views 页面文件
       App.vue
       main.js
-      static
-      test
-      .babelrc
-      .editorconfig
-      .eslintignore
-      .eslintrc.js
-      .gitignore
-      .postcssrc.js
-      index.html
-      package.json
-      README.md
-      todolist.md
-      yarn-error.log
+    .gitignore
+    babel.config.js
+    package.json
+    README.md
+    todolist.md
+    vue.config.js
 
 
 ## 更新记录
