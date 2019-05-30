@@ -28,50 +28,57 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+## 项目架构
 
-## 项目说明：
-    一个微博类移动端项目可以实现登录注册 发表文章、发表评论、添加收藏等基本功能
+ - 项目说明：
+
+
     借鉴了部分微博的设计风格
     项目为业余之间编写功能尚不完善 有问题欢迎指正。
 
-## 技术说明：
+ - 功能概览
+     一个微博类移动端项目可以实现登录注册 发表文章、发表评论、添加收藏等基本功能
+
+
+ - 技术栈：
     前端页面使用vue vue-cli搭建，css使用了部分bootstrap相关类
     登录方面使用token验证
     后台使用nodejs配合express
     数据库MongoDB
 
-## 文件结构：
-    public
-    serve
-      config
-        config.js 服务端项目全局变量缓存文件
-      utils
-        jwtauth.js token验证中间件
-        Util.js 工具类
-      api.js 接口api文件
-      db.js 数据库配置文件
-      index.js 后端服务总入口
-    src
-      assets
-        css css文件
-        img 图片
-      components vue公共组件
-      config 前端全局变量缓存文件
-      models
-        managers 统一封装axios
-        services 统一封装axios对外暴露方法
-        utils 工具类
-      router 路由
-      store vuex文件
-      views 页面文件
-      App.vue
-      main.js
-    .gitignore
-    babel.config.js
-    package.json
-    README.md
-    todolist.md
-    vue.config.js
+ - 文件结构：
+     ├─public
+     ├─serve
+     │  ├─config
+     │  │  └─config.js                      // 服务端项目全局变量缓存文件
+     │  ├─utils
+     │  │  └─jwtauth.js                     // token验证中间件
+     │  │  └─Util.js                        // 工具类
+     │  ├─api.js                             // 接口api文件
+     │  ├─db.js                              // 数据库配置文件
+     │  └─index.js                           // 后端服务总入口
+     ├─src
+     │  ├─assets                             // 静态资源
+     │  │  └─css
+     │  │  └─img
+     │  ├─components                         // vue公共组件
+     │  ├─config                             // 前端全局变量缓存文件
+     │  ├─models                             // 封装功能方法
+     │  │  └─managers
+     │  │  └─services
+     │  │  └─utils
+     │  ├─router                             // 路由
+     │  ├─store                              // vuex文件
+     │  ├─views                              // 页面文件
+     │  ├─App.vue
+     │  ├─main.js
+     │  └─views
+     ├─.gitignore
+     ├─babel.config.js
+     ├─package.json
+     ├─README.md
+     ├─todolist.md
+     └─vue.config.js
 
 
 ## 更新记录
