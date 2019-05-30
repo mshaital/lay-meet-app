@@ -11,3 +11,10 @@
 11 建立图片服务器
 12 关注账号备注系统
 13 限制双击放大（bug）
+ config.resolve.alias.set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
+    config.resolve.alias.set('~models', resolve('src/models'))
+    config.resolve.alias.set('~utils', resolve('src/models/utils'))
+    config.resolve.alias.set('~components', resolve('src/components'))
+    config.resolve.alias.set('~modules', resolve('src/models/services/modules'))
+    config.resolve.alias.set('~config', resolve('src/config'))
+    config.resolve.alias.set('~views', resolve('src/views'))

@@ -1,12 +1,11 @@
 <template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="getList" class="mb-5">
     <list-item
-      v-for="(item, index) in inValue" :key="item.index"
+      v-for="(item, index) in inValue" :key="index"
       :inValue="item"
       :userInfo="userInfo"
       @add-follow="addFollow"
       @un-follow="unFollow"
-      class=""
     ></list-item>
   </van-list>
 </template>

@@ -3,10 +3,10 @@
     <nav-index title="发现"></nav-index>
 
 
-      <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary">Left</button>
-        <button type="button" class="btn btn-secondary">Right</button>
-      </div>
+      <!--<div class="btn-group" role="group" aria-label="Basic example">-->
+        <!--<button type="button" class="btn btn-secondary">Left</button>-->
+        <!--<button type="button" class="btn btn-secondary">Right</button>-->
+      <!--</div>-->
 
     <article-list :in-value="dataList" @refresh="getList" ref="ArticleList"></article-list>
   </div>
