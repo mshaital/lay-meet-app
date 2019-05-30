@@ -30,7 +30,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## 项目架构
 
- - 项目说明：
+* 项目说明：
 
     类似于微博的移动端应用 建立之初是为了学习nodejs 后来工作之余也不断完善
     目前很多功能没有实现
@@ -39,19 +39,20 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     借鉴了部分微博的设计风格
     项目为业余之间编写功能尚不完善 有问题欢迎给我提issue
 
- - 功能概览：
+* 功能概览：
 
      一个微博类移动端项目可以实现登录注册 发表文章、发表评论、添加收藏等基本功能
 
- - 技术栈：
+* 技术栈：
 
     前端页面使用vue vue-cli搭建，css使用了部分bootstrap相关类
     登录方面使用token验证
     后台使用nodejs配合express
     数据库MongoDB
 
- - 文件结构：
+* 目录结构：
 
+```javascript
      ├─public
      ├─serve
      │  ├─config
