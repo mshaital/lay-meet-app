@@ -10,10 +10,10 @@
     </van-nav-bar>
     <van-skeleton title avatar :row="7" :loading="showSkeleton">
 
-      <div class="list-item">
+      <div class="list-item bg-white">
         <div class="item-head">
           <div class="item-head-img" @click="goAuthor">
-            <img src="../../assets/img/head.png">
+            <img class="rounded-circle" src="../../assets/img/head.png">
           </div>
           <div class="item-title">
             <div class="item-title-more w-100 d-flex justify-content-between">
@@ -42,8 +42,8 @@
       </div>
 
       <div class="mt-2 white-bg font-14 font-grey p-2 border-bottom">
-        <span class="align-middle">赞 {{articleInfo.likes}}</span>
-        <span class="align-middle font-orange">评论 {{articleInfo.comment.length}}</span>
+        <span class="align-middle pr-2">赞 {{articleInfo.likes}}</span>
+        <span class="align-middle font-orange pr-2">评论 {{articleInfo.comment.length}}</span>
         <span class="align-middle">阅读 {{articleInfo.read_num}}</span>
         <span class="align-middle float-right">分享 {{articleInfo.read_num}}</span>
       </div>
@@ -70,15 +70,15 @@
       </div>
     </van-skeleton>
 
-    <div class="footer align-middle d-flex align-items-center" @click="showCreatedComment=true">
-      <img class="" :src="userInfo.head_img">
+    <div class="footer align-middle d-flex align-items-center bg-white" @click="showCreatedComment=true">
+      <img class="rounded-circle" :src="userInfo.head_img">
       <span class="font-grey font-14"> 添加评论...</span>
     </div>
     <van-popup v-model="showCreatedComment" position="bottom">
       <div class="com-popup">
-        <textarea v-model="comment" autofocus placeholder="添加评论..."/>
+        <textarea class="bg-white" v-model="comment" autofocus placeholder="添加评论..."/>
         <div class="font-grey">
-          <img class="" :src="userInfo.head_img">
+          <img class="rounded-circle" :src="userInfo.head_img">
           <span class="float-right ">
             <span class="align-middle">{{comment.length}}</span>&nbsp;
             <van-icon @click="createComment" class="align-middle" name="envelop-o" slot="right" size="22px"/>
@@ -234,21 +234,16 @@
   }
 </script>
 <style lang="scss" scoped>
-  .content {
-    background-color: #e8e8e8;
-  }
+
 
   .list-item {
     margin-top: 10px;
-    background-color: white;
     padding: 5px;
-
   }
 
   .item-head {
     display: flex;
     padding: 0.5rem 0.5rem 0 0.5rem;
-    background-color: white;
     .item-head-img {
       margin-right: 10px;
       width: 40px;
@@ -292,7 +287,6 @@
     position: fixed;
     bottom: 0;
     height: 40px;
-    background-color: white;
     img {
       height: 30px;
     }

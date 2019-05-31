@@ -53,9 +53,9 @@
    .search-input{
      width: 90%;
      margin: 10px 0;
-     padding: 0 5px;
+     padding: 0 10px;
      outline: none;
-     border: grey solid 1px;
+     border: #e3e3e3 solid 1px;
      border-radius: 20px;
    }
  }

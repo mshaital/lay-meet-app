@@ -61,7 +61,6 @@
         coopService.getArticleListByAuthor(data, axiosConfig).then(res => {
 
           _this.showSkeleton = false
-          console.log(_this.showSkeleton )
           if (!res) return
           _this.dataList.push(...res)
           _this.skip += 20
@@ -84,7 +83,7 @@
     height: 30px;
     line-height: 24px;
     padding-top: 2px;
-    background-color: $deep-green;
+    background-color: $deep-blue;
     color: white;
     text-align: center;
     border-radius: 15px;

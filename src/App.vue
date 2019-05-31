@@ -11,6 +11,7 @@
 </script>
 
 <style lang="scss">
+  @import './assets/css/_currency';
   @import './assets/css/animate';
   @import './assets/css/base';
   @import './assets/css/bootstrap-reboot.css';
@@ -34,5 +35,8 @@
   }
   .overflow-hidden{
     overflow: hidden !important;
+  }
+  .van-tabbar-item--active{
+    color:$deep-blue !important;
   }
 </style>

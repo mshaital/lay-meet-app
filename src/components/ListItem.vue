@@ -14,8 +14,8 @@
               {{isUserFollow ? '取消关注' : '关注'}}
             </div>
             <div class="align-middle">
-              <van-icon v-if="userInfo.bookmarks.indexOf(inValue.articleId) < 0" class="align-middle" name="like-o"/>
-              <van-icon class="align-middle text-danger" name="like" v-else/>
+              <!--<van-icon v-if="userInfo.bookmarks.indexOf(inValue.articleId) < 0" class="align-middle" name="like-o"/>-->
+              <!--<van-icon class="align-middle text-danger" name="like" v-else/>-->
               {{userInfo.bookmarks.indexOf(inValue.articleId) > -1 ? '已赞' : '点赞'}}
             </div>
           </div>
@@ -138,7 +138,7 @@
       background-color: white;
       top: 20px;
       right: 5px;
-      padding: 5px;
+      padding: 5px 15px;
       font-size: 14px;
     }
 

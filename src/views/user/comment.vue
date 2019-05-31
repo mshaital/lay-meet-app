@@ -36,7 +36,6 @@
         coopService.getUserComment(data).then(res => {
           if (!res) return
           _this.dataList.push(...res)
-          console.log(_this.dataList)
           if (res.length <= 0) _this.hasMore = false
           _this.skip += 20
           this.loading = false

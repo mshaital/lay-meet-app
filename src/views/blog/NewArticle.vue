@@ -220,7 +220,7 @@
     line-height: 24px;
     padding-top: 2px;
     background-color: #e6e6e6;
-    color: $deep-green;
+    color: $deep-blue;
     text-align: center;
     border-radius: 15px;
   }

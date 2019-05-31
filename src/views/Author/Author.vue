@@ -24,11 +24,13 @@
     <div  class="d-flex justify-content-between">
       <div class="account">{{authorInfo.nick || authorInfo.account}}</div>
 
-      <div class="m-3">
-        <span class="edit bg-gray" @click="sendPrivateLetter"><van-icon name="envelop-o" size="18px"/></span>
-        <span @click="isFocus" :class="{'active':!isUserFollow}" class="edit">
+      <div class="m-3 d-flex">
+        <div class="edit bg-gray" @click="sendPrivateLetter">
+          <van-icon name="envelop-o" size="18px"/>
+        </div>
+        <div @click="isFocus" :class="{'active':!isUserFollow}" class="edit">
           {{isUserFollow ? '已关注':'关注'}}
-        </span>
+        </div>
       </div>
     </div>
     <div class="ml-3 font-12 font-grey">上海</div>
@@ -230,6 +232,7 @@
     padding: 10px;
     border-radius: 30px;
     background-color: gainsboro;
+    height: 40px;
     *{
       vertical-align: middle;
 

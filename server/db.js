@@ -75,6 +75,15 @@ const problemSchema = mongoose.Schema({
   classIfication: String
 })
 
+const topicSchema = mongoose.Schema({
+  id: String,
+  date: Date,
+  account: String,
+  content: String,
+  owner: String,
+  classIfication: String
+})
+
 const routerSchema = mongoose.Schema({
   role: {type: String, default: 'admin'},
   router: {type: String, default: {path: '/Admin', name: 'Admin', component: (resolve) => require(['@/views/admin/Admin'], resolve)}}
@@ -86,6 +95,7 @@ const Models = {
   Article: mongoose.model('article', articleSchema),
   Draft: mongoose.model('draft', draftSchema),
   Problem: mongoose.model('Problem', problemSchema),
+  Topic: mongoose.model('Topic', topicSchema),
   Router: mongoose.model('Router', routerSchema),
   featuredArticles: mongoose.model('featuredArticles', featuredArticlesSchema)
 }

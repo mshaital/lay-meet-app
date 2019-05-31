@@ -1,10 +1,6 @@
 <template>
   <div class="content bg-light-grey">
-    <van-nav-bar title="投诉建议" left-text="" left-arrow
-                 right-text="保存"
-                 @click-left="onClickLeft"
-                 @click-right="submitForm">
-    </van-nav-bar>
+    <nav-title title="投诉建议"></nav-title>
     <div class="p-2 white-bg">
       <area-input  v-model="problemForm.content" min-height="300px" tips="我想说"></area-input>
     </div>
@@ -23,6 +19,7 @@
   import Cache from '~utils/cache'
   import AreaInput from '~components/AreaInput'
   import {Toast} from 'vant';
+  import NavTitle from '~components/NavTitle'
 
   import xss from 'xss'
 
@@ -30,6 +27,7 @@
     name: 'editor',
     components: {
       AreaInput,
+      NavTitle,
     },
     data () {
       return {

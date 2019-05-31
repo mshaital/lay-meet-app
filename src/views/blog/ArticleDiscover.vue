@@ -9,6 +9,23 @@
       </div>
     </div>
 
+    <div>
+      <div class="bg-white pt-1 pb-1 pl-2 pr-2 font-14 border-bottom">
+        <span class="font-grey">热门话题</span>
+        <span class="float-right">
+          <van-icon class="align-middle" name="arrow" size="18px"/>
+        </span>
+      </div>
+      <div class="bg-white p-1 font-16 clearfix">
+        <div class="float-left p-1" v-for="(item, index) in hotList" :key="index">
+          <van-icon class="align-middle" name="fire" color="red"/>
+          <span>{{item}}</span>
+        </div>
+
+      </div>
+
+    </div>
+
     <article-list :in-value="dataList" @refresh="getList" ref="ArticleList"></article-list>
   </div>
 </template>
@@ -28,7 +45,18 @@
     data () {
       return {
         skip: 0,
-        dataList:[]
+        dataList:[],
+        hotList: [
+          '吴京代言英英平精英',
+          '吴 平精英平精英',
+          '吴京代言和 精英平精英平精英平精英',
+          '吴京代言和平精英平精英平 精英平精英',
+          '吴京代言和英平精英',
+          '吴京代言和平精英平精英平精 平精英',
+          '吴 精英平精英',
+          '吴京代言和平 精英平精英平精英',
+          '精精英',
+        ]
       }
     },
     created () {
