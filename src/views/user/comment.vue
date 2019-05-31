@@ -1,5 +1,5 @@
 <template>
-<div class="gray-bg">
+<div class="bg-gray">
   <nav-title title="我的评论"></nav-title>
   <article-list class="mt-4" :in-value="dataList" @refresh="getList"></article-list>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content bg-light-grey">
     <nav-title title="个人资料" rightText="保存" @right-click="userModify"></nav-title>
     <div class="mt-5">
       <div class="head-img mx-auto d-block">
@@ -98,7 +98,6 @@
   }
   .content{
     height: 100vh;
-    background-color: $bg-light-gray;
   }
   .head-img{
     width: 70px;

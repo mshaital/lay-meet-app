@@ -3,25 +3,27 @@
  */
 const Storage = localStorage
 export default {
-  get: function (key) {
-    if (Storage !== undefined && Storage !== null) {
-      let a = Storage.getItem(key)
-      let d = JSON.parse(a)
-      return d
-    }
+  hasStory () {
+    return Storage !== undefined && Storage !== null
   },
-  set: function (key, value) {
-    if (Storage !== undefined && Storage !== null) {
-      let val = JSON.stringify(value)
-      Storage.setItem(key, val)
-    }
+  get (key) {
+    if (!this.hasStory) return
+    let a = Storage.getItem(key)
+    let d = JSON.parse(a)
+    return d
   },
-  remove: function (key) {
-    if (Storage !== undefined && Storage !== null) {
-      Storage.removeItem(key)
-    }
+  set (key, value) {
+    if (!this.hasStory) return
+
+    let val = JSON.stringify(value)
+    Storage.setItem(key, val)
   },
-  clear: function () {
+  remove (key) {
+    if (!this.hasStory) return
+    Storage.removeItem(key)
+  },
+  clear () {
+    if (!this.hasStory) return
     Storage.clear()
   }
 }

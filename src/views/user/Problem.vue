@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content bg-light-grey">
     <van-nav-bar title="投诉建议" left-text="" left-arrow
                  right-text="保存"
                  @click-left="onClickLeft"
@@ -74,7 +74,6 @@
 </script>
 <style lang="scss" scoped>
   .content{
-    background-color: #f2f2f2;
     height: 100vh;
   }
 </style>

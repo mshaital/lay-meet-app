@@ -1,5 +1,5 @@
 <template>
-<div class="gray-bg">
+<div class="bg-gray">
   <nav-title :title="lastPage==='IndexPage'? '我的赞' :'他的赞'"></nav-title>
   <template v-if="showTip">
     <article-list class="" :in-value="dataList" @refresh="getList" ref="ArticleList"></article-list>

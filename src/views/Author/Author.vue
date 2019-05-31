@@ -25,7 +25,7 @@
       <div class="account">{{authorInfo.nick || authorInfo.account}}</div>
 
       <div class="m-3">
-        <span class="edit gray-bg" @click="sendPrivateLetter"><van-icon name="envelop-o" size="18px"/></span>
+        <span class="edit bg-gray" @click="sendPrivateLetter"><van-icon name="envelop-o" size="18px"/></span>
         <span @click="isFocus" :class="{'active':!isUserFollow}" class="edit">
           {{isUserFollow ? '已关注':'关注'}}
         </span>
@@ -40,14 +40,14 @@
       <span class="font-12" @click="goBookMark">他的赞</span>
     </div>
 
-    <div class="p-2 gray-bg">
+    <div class="p-2 bg-gray">
       <span class="p-2 font-14 font-grey">全部微博 • {{dataList.length}}</span>
       <span class="font-blue float-right font-14">
         <van-icon class="align-middle" name="bar-chart-o" />
         <span class="align-middle">筛选</span>
       </span>
     </div>
-    <div class="gray-bg">
+    <div class="bg-gray">
       <article-list :in-value="dataList" @refresh="getList" ref="ArticleList"></article-list>
     </div>
     </van-skeleton>

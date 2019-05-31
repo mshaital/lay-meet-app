@@ -1,12 +1,13 @@
 <template>
-  <div class="content">
+  <div class="bg-light-grey">
     <nav-index title="发现"></nav-index>
 
-
-      <!--<div class="btn-group" role="group" aria-label="Basic example">-->
-        <!--<button type="button" class="btn btn-secondary">Left</button>-->
-        <!--<button type="button" class="btn btn-secondary">Right</button>-->
-      <!--</div>-->
+    <div class="w-100 d-flex justify-content-center p-1">
+      <div class="btn-group btn-group-sm mx-auto" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-info">最新</button>
+        <button type="button" class="btn btn-light">最热</button>
+      </div>
+    </div>
 
     <article-list :in-value="dataList" @refresh="getList" ref="ArticleList"></article-list>
   </div>
@@ -52,7 +53,5 @@
   }
 </script>
 <style lang="scss" scoped>
-  .content{
-    background-color: #f3f3f3;
-  }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="bg-gray">
     <nav-title title="草稿箱" right-text="清空" @right-click="clear"></nav-title>
     <div class="border-bottom p-2 font-grey font-14 mt-2 bg-white">草稿</div>
     <van-list v-model="loading" :finished="finished" finished-text="" @load="getList">

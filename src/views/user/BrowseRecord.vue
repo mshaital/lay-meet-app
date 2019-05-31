@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="bg-gray">
     <nav-title title="浏览记录"></nav-title>
 
     <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="getList">

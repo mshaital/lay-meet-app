@@ -514,9 +514,9 @@ router.post('/api/blog/getAllArticle', (req, res, next) => {
  * @param {String} skip 返回数量
  * @return {Object} data
  */
-router.get('/api/blog/getArticleDetailsAndAuthorInfo', (req, res, next) => {
+router.post('/api/blog/getArticleDetailsAndAuthorInfo', (req, res, next) => {
   // console.log('getArticleDetailsAndAuthorInfo')
-  let articleId = req.query.articleId
+  let articleId = req.body.articleId
 
   models.Article.aggregate({
       $lookup: { // 左连接
@@ -788,10 +788,10 @@ router.post('/api/blog/getBookmarkList', (req, res, next) => {
  * @param {String} articleId 文章ID
  * @return {String} SUCCESS/FAIL
  */
-router.get('/api/blog/addReadNumber', [Util.getToken()], (req, res, next) => {
+router.post('/api/blog/addReadNumber', [Util.getToken()], (req, res, next) => {
   // console.log('addReadNumber')
-  let articleId = req.query.articleId
-  let userId = req.userId
+  let articleId = req.body.articleId
+  // let userId = req.userId
 
   models.Article.update({'article_id': articleId}, {'$inc': {'read_num': 1}}, {upsert: true}, (err, data) => {
     if (err) {
@@ -1047,6 +1047,8 @@ router.post('/api/blog/getArticleListByAuthor', (req, res, next) => {
       $project: {
         head_img: 1,
         account: 1,
+        author_id: 1,
+        article_id: 1,
         title: 1,
         classification: 1,
         date: 1,

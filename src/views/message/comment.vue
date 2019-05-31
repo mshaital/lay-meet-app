@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="bg-gray">
     <div class="d-flex">
       <div class="comment" @click="getList('getCommentByAuthorId')">收到的评论</div>
       <div class="comment" @click="getList('getUserComment')">发出的评论</div>

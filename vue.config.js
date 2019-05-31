@@ -36,7 +36,9 @@ module.exports = {
     // 确保静态资源
     config.resolve.extensions = ['.js', '.vue', '.json', '.css']
     config.plugins.push(
-      new CopyWebpackPlugin([{ from: 'public/', to: 'public' }]),
+      new CopyWebpackPlugin([
+        { from: 'public/', to: 'public' }
+        ]),
     )
     if (process.env.NODE_ENV === 'production') {
       // 为生产环境修改配置...

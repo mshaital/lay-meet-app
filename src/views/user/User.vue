@@ -21,7 +21,7 @@
       <span class="font-12">{{userInfo.follow.length}}<span class="font-grey">粉丝</span></span>
       <span class="font-12" @click="goBookMark">我的赞</span>
     </div>
-    <div class="p-2 gray-bg">
+    <div class="p-2 bg-gray">
       <span class="p-2 font-14 font-grey">全部微博 • {{1}}</span>
       <span class="font-blue float-right font-14">
         <van-icon class="align-middle" name="bar-chart-o" />

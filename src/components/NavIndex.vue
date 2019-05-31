@@ -77,7 +77,7 @@
     padding: 10px;
   }
   .nav-sub{
-    height: 40px;
+    height: 50px;
   }
 
 </style>

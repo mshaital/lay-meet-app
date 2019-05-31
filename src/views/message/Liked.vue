@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="bg-gray">
 
     <div class="pt-1 pb-1 pl-2 font-grey font-14">共{{dataList.length}}人赞了你</div>
     <template v-if="dataList>0">

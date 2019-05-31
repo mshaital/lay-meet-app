@@ -112,7 +112,7 @@
       },
       userFollow () {
         let _this = this
-        let data = {authorId: this.inValue.authorId}
+        let data = {authorId: this.inValue.author_id}
         console.log(data)
 
         coopService.addUserAuthorFollow(data).then(res => {

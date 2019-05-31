@@ -12,8 +12,8 @@ export default {
     return AxiosManager.post(Apis.getAllArticle, params, config)
   },
 
-  getArticleDetailsAndAuthorInfo (params) {
-    return AxiosManager.get(Apis.getArticleDetailsAndAuthorInfo, params)
+  getArticleDetailsAndAuthorInfo (params, config) {
+    return AxiosManager.post(Apis.getArticleDetailsAndAuthorInfo, params, config)
   },
 
   getAccount (params) {
@@ -52,8 +52,8 @@ export default {
     return AxiosManager.post(Apis.updateArticle, params)
   },
 
-  addReadNumber (params) {
-    return AxiosManager.get(Apis.addReadNumber, params)
+  addReadNumber (params, config) {
+    return AxiosManager.post(Apis.addReadNumber, params, config)
   },
 
   createComment (params) {

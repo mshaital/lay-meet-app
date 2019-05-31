@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="bg-gray">
     <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="getList">
         <div class="item-head"  v-for="(item, index) in dataList" :key="item.index" :index="index">
           <div class="item-head-img" @click="goAuthor(item)">

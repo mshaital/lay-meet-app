@@ -42,11 +42,14 @@
 .green-bg{
   background-color: #80bd94;
 }
-.gray-bg{
+.bg-gray{
   background-color: #efefef;
 }
 .lightRed-bg{
   background-color: #de6135;
+}
+.bg-light-grey{
+  background-color: #f3f3f3;
 }
 .green-bg-dark{
   background-color: #3c8d7c;

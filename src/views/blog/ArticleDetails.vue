@@ -1,70 +1,75 @@
 <template>
-  <div class="content">
+  <div class="bg-light-grey">
     <van-nav-bar
-      :title="authorInfo.nick || authorInfo.account"
-      left-text=""
-      right-text=""
-      left-arrow
-      @click-left="$router.go(-1)"
+        :title="authorInfo.nick || authorInfo.account"
+        left-text=""
+        right-text=""
+        left-arrow
+        @click-left="$router.go(-1)"
     >
     </van-nav-bar>
-    <div class="list-item">
-      <div class="item-head">
-        <div class="item-head-img" @click="goAuthor">
-          <img src="../../assets/img/head.png">
-        </div>
-        <div class="item-title">
-          <div class="item-title-more w-100 d-flex justify-content-between">
-            <span class="">{{authorInfo.nick || authorInfo.account}}</span>
-            <div class="" @click="isFollow">
-              <van-icon name="friends-o" :color="isUserFollow?'#ff530b':''" />
-              <van-icon :name="isUserFollow ? 'success' : 'plus'" :color="isUserFollow?'#ff530b':''"/>
-            </div>
-          </div>
-          <div class="item-title-time">
-            <span>{{articleInfo.article_date | dateChange}}</span>
-            <span>{{articleInfo.category}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="item-content border-bottom" @click="">
-        <p class="hide-text mt-2">{{articleInfo.content}}</p>
-        <img src="../../assets/img/banner-5.png">
-      </div>
-      <div class="d-flex justify-content-around p-2">
-        <van-icon :name="showBookMark?'like':'like-o'" :color="showBookMark?'#ff530b':''" size="20px" @click="isLike"/>
-        <van-icon name="comment-o" size="20px" @click="showCreatedComment=true"/>
-        <van-icon name="share" size="20px"/>
-      </div>
-    </div>
+    <van-skeleton title avatar :row="7" :loading="showSkeleton">
 
-    <div class="mt-2 white-bg font-14 font-grey p-2 border-bottom">
-      <span class="align-middle">赞 {{articleInfo.likes}}</span>
-      <span class="align-middle font-orange">评论 {{articleInfo.comment.length}}</span>
-      <span class="align-middle">阅读 {{articleInfo.read_num}}</span>
-      <span class="align-middle float-right">分享 {{articleInfo.read_num}}</span>
-    </div>
-    <div>
-      <div class="comment white-bg" v-if="articleInfo.comment" v-for="item in articleInfo.comment" :key="item.index">
+      <div class="list-item">
         <div class="item-head">
           <div class="item-head-img" @click="goAuthor">
-            <img class="img-fluid" src="../../assets/img/head.png">
+            <img src="../../assets/img/head.png">
           </div>
           <div class="item-title">
+            <div class="item-title-more w-100 d-flex justify-content-between">
+              <span class="">{{authorInfo.nick || authorInfo.account}}</span>
+              <div class="" @click="isFollow">
+                <van-icon name="friends-o" :color="isUserFollow?'#ff530b':''"/>
+                <van-icon :name="isUserFollow ? 'success' : 'plus'" :color="isUserFollow?'#ff530b':''"/>
+              </div>
+            </div>
+            <div class="item-title-time">
+              <span>{{articleInfo.article_date | dateChange}}</span>
+              <span>{{articleInfo.category}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="item-content border-bottom" @click="">
+          <p class="hide-text mt-2">{{articleInfo.content}}</p>
+          <img src="../../assets/img/banner-5.png">
+        </div>
+        <div class="d-flex justify-content-around p-2">
+          <van-icon :name="showBookMark?'like':'like-o'" :color="showBookMark?'#ff530b':''" size="20px"
+                    @click="isLike"/>
+          <van-icon name="comment-o" size="20px" @click="showCreatedComment=true"/>
+          <van-icon name="share" size="20px"/>
+        </div>
+      </div>
+
+      <div class="mt-2 white-bg font-14 font-grey p-2 border-bottom">
+        <span class="align-middle">赞 {{articleInfo.likes}}</span>
+        <span class="align-middle font-orange">评论 {{articleInfo.comment.length}}</span>
+        <span class="align-middle">阅读 {{articleInfo.read_num}}</span>
+        <span class="align-middle float-right">分享 {{articleInfo.read_num}}</span>
+      </div>
+      <div>
+        <div class="comment white-bg" v-if="articleInfo.comment" v-for="item in articleInfo.comment" :key="item.index">
+          <div class="item-head">
+            <div class="item-head-img" @click="goAuthor">
+              <img class="img-fluid" src="../../assets/img/head.png">
+            </div>
+            <div class="item-title">
             <span class="item-title-more w-100">
               <span class="font-14">{{item.nick || item.userAccount}}</span>
               <span class="Blogger" v-if="item.userId === articleInfo.author_id">博主</span>
             </span>
-            <div class="item-title-time">
-              <span class="font-12">{{item.date | dateChange}}</span>
+              <div class="item-title-time">
+                <span class="font-12">{{item.date | dateChange}}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="white-bg p-2 border-bottom">
+          <div class="white-bg p-2 border-bottom">
             {{item.comment}}
+          </div>
         </div>
       </div>
-    </div>
+    </van-skeleton>
+
     <div class="footer align-middle d-flex align-items-center" @click="showCreatedComment=true">
       <img class="" :src="userInfo.head_img">
       <span class="font-grey font-14"> 添加评论...</span>
@@ -89,7 +94,7 @@
   /* eslint-disable */
   import xss from 'xss'
   import coopService from '~modules/coopService'
-  import { Toast } from 'vant'
+  import {Toast} from 'vant'
 
   import moment from 'moment'
   moment.locale('zh-cn')
@@ -98,6 +103,7 @@
     components: {},
     data () {
       return {
+        showSkeleton: true,
         userInfo: this.$store.state.userInfo,
         comment: '',
         bookmarks: '',
@@ -142,14 +148,20 @@
         let paramsData = this.$route.params
         if (!paramsData) return
         let data = {articleId: paramsData.articleId}
-        coopService.addReadNumber(data).then(res => {})
+        const axiosConfig = {axiosShowLoading: false}
+
+        coopService.addReadNumber(data, axiosConfig).then(res => {
+        })
       },
       getContent () {
         let _this = this
         let articleId = _this.$route.params.articleId
         if (!articleId) _this.$router.push('/login')
         let data = {articleId: articleId}
-        coopService.getArticleDetailsAndAuthorInfo(data).then(res => {
+        const axiosConfig = {axiosShowLoading: false}
+
+        coopService.getArticleDetailsAndAuthorInfo(data, axiosConfig).then(res => {
+          _this.showSkeleton = false
           let articleData = res
           _this.articleInfo = articleData
           _this.authorInfo = articleData.user
@@ -157,7 +169,7 @@
           if (!_this.userInfo) return
           let bookMark = _this.userInfo.bookmarks
           bookMark.map(item => {
-            if (item.article_id === articleData.article_id ) _this.showBookMark = true
+            if (item.article_id === articleData.article_id) _this.showBookMark = true
           })
           let authorFocus = Object.keys(_this.userInfo.author_focus || {})
           if (authorFocus.indexOf(_this.articleInfo.author_id) > -1) _this.isUserFollow = true
@@ -232,6 +244,7 @@
     padding: 5px;
 
   }
+
   .item-head {
     display: flex;
     padding: 0.5rem 0.5rem 0 0.5rem;
@@ -262,39 +275,44 @@
       }
     }
   }
+
   .item-content {
     img {
       width: 100%;
     }
   }
+
   .item-footer {
     color: grey;
   }
-  .footer{
+
+  .footer {
     width: 100%;
     padding: 5px;
     position: fixed;
     bottom: 0;
     height: 40px;
     background-color: white;
-    img{
+    img {
       height: 30px;
     }
   }
-  .com-popup{
+
+  .com-popup {
     padding: 5px;
     width: 100%;
-    textarea{
+    textarea {
       width: 100%;
       border: none;
-      resize:none
+      resize: none
     }
-    img{
+    img {
       width: 30px;
       height: 30px;
     }
   }
-  .comment{
+
+  .comment {
     .item-head {
       display: flex;
       .item-head-img {
@@ -311,13 +329,13 @@
 
         .item-title-more {
           line-height: 1px;
-          .Blogger{
+          .Blogger {
             width: 30px;
             height: 17px;
             border: rgba(40, 40, 255, 0.89) solid 1px;
             color: rgba(40, 40, 255, 0.89);
             font-size: 10px;
-            padding:0 2px;
+            padding: 0 2px;
             border-radius: 3px;
             background-color: rgba(47, 44, 255, 0.2);
           }

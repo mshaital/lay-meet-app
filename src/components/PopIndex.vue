@@ -20,7 +20,7 @@
           <van-icon name="fire-o" size="20px" class="mr-4 align-middle"/>
           <span class="align-middle">我的动态</span>
         </div>
-        <div class="p-3 border-bottom" @click="goView(3)" >
+        <div class="p-3 border-bottom" @click="goView(3)">
           <van-icon name="setting-o" size="20px" class="mr-4 align-middle"/>
           <span class="align-middle">设置</span>
         </div>
@@ -31,6 +31,13 @@
         <div class="p-3 border-bottom" @click="goView(5)">
           <van-icon name="underway-o" size="20px" class="mr-4 align-middle"/>
           <span class="align-middle">浏览记录</span>
+        </div>
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center" @click="">
+          <div>
+            <van-icon name="underway-o" size="20px" class="mr-4 align-middle"/>
+            <span class="align-middle">夜间模式</span>
+          </div>
+          <van-switch class="float-right" @change="changeTheme" v-model="checked" size="14px" active-color="#17a2b8"/>
         </div>
         <div class="p-3" @click="goView(6)">
           <van-icon name="service" size="20px" class="mr-4 align-middle"/>
@@ -46,18 +53,26 @@
   /* eslint-disable */
   import {Popup} from 'vant';
 
+  import Cache from '~utils/cache';
+  import THEME from '~config/theme'
+
   export default {
-    components: {
-    },
+    components: {},
     name: 'NavIndex',
     data () {
       return {
+        checked: true,
         showPop: this.value,
         userInfo: this.$store.state.userInfo,
       }
     },
     props: ['value'],
+    created() {
+      if(!Cache.get('theme')) this.checked = true
+      this.checked = Cache.get('theme') === 'night'
+      },
     methods: {
+
       goView (index) {
         let stateList = [
           {
@@ -91,11 +106,17 @@
         ]
         this.$router.push({name: stateList[index].state, params: stateList[index].params})
       },
+      changeTheme() {
+        let themeClass = this.checked ? 'night' : 'day'
+        let theme = document.getElementById('change-theme');
+        theme.innerHTML = THEME.THEME[themeClass];
+        Cache.set('theme', themeClass)
+      }
     },
-    watch:{
+    watch: {
       value(val){
         this.showPop = val
-        this.$emit('input',val);//传值给父组件, 让父组件监听到这个变化
+        this.$emit('input', val);//传值给父组件, 让父组件监听到这个变化
       }
     },
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="bg-gray">
     <nav-title title="我的动态"></nav-title>
     <van-list
       v-model="loading"
