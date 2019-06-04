@@ -22,14 +22,34 @@ const xss = require('xss')
 const Util = require('./utils/Util')
 const uuid = require('uuid')
 
-
-
-
 app.set('jwtTokenSecret', config.jwtTokenSecret)
+
+const qnConfig = require('./config/qn-config')
+const fs = require('fs');
+const qiniu = require('qiniu');
+
+
 
 router.use((req, res, next) => {
   console.log('=========================' + req.url + '=========================')
   next()
+})
+
+/**
+ * @description 获取上传图片凭证
+ * @return {String} uploadToken
+ */
+router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
+  let accessKey = qnConfig.AccessKey;
+  let secretKey = qnConfig.SecretKey;
+
+  let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+  let options = {
+    scope: qnConfig.Bucket,
+  };
+  let putPolicy = new qiniu.rs.PutPolicy(options);
+  let uploadToken=putPolicy.uploadToken(mac);
+  next({message: config.RES_MSE.SUCCESS_MSG, data: uploadToken, code: config.RES_DATA_CODE.SUCCESS_CODE})
 })
 
 /**

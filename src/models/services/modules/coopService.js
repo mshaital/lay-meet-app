@@ -4,6 +4,13 @@ import AxiosManager from '~models/managers/axiosManager'
 
 export default {
 
+  upload (params) {
+    return AxiosManager.post(Apis.upload, params)
+  },
+  getImgUploadToken (params) {
+    return AxiosManager.post(Apis.getImgUploadToken, params)
+  },
+
   userRegister (params) {
     return AxiosManager.post(Apis.userRegister, params)
   },

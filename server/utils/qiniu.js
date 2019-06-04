@@ -1,38 +1,70 @@
-/**
- * qiniu
- * Created by dell on 2018/5/31.
- */
-'use strict'
-const qiniu = require('qiniu')
-const accessKey = 'your access key';
-const secretKey = 'your secret key';
-const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const qiniu = require('qiniu');
 
-const qiniuConfig = new qiniu.conf.Config();
-// 空间对应的机房
-qiniuConfig.zone = qiniu.zone.Zone_z0;
+let app = express();
+let config = JSON.parse(fs.readFileSync(path.resolve(__dirname, "config.json")));
+let mac = new qiniu.auth.digest.Mac(config.AccessKey, config.SecretKey);
 
+let putExtra = new qiniu.form_up.PutExtra();
+let options = {
+  scope: config.Bucket,
+  deleteAfterDays: 1,
+  returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
+};
 
+let putPolicy = new qiniu.rs.PutPolicy(options);
+let bucketManager = new qiniu.rs.BucketManager(mac, config);
 
-module.exports = ()=> {
-  var options = {
-    scope: bucket,
+app.get('/index.html', function(req, res) {
+  res.sendFile(__dirname + "/" + "index.html");
+});
+
+app.get('/api/getImg', function(req, res) {
+  let options = {
+    limit: 5,
+    prefix: 'image/test/',
+    marker: req.query.marker
   };
-  var putPolicy = new qiniu.rs.PutPolicy(options);
-  var uploadToken=putPolicy.uploadToken(mac);
-  let formUploader = new qiniu.form_up.FormUploader(qiniuConfig);
-  let putExtra = new qiniu.form_up.PutExtra();
-  let key='test.txt';
-  formUploader.put(uploadToken, key, "hello world", putExtra, function(respErr,
-                                                                       respBody, respInfo) {
-    if (respErr) {
-      throw respErr;
+  bucketManager.listPrefix(config.Bucket, options, function(err, respBody, respInfo) {
+    if(err) {
+      console.log(err);
+      throw err;
     }
-    if (respInfo.statusCode == 200) {
-      console.log(respBody);
+
+    if(respInfo.statusCode === 200) {
+      let nextMarker = respBody.marker || '';
+      let items = respBody.items;
+      res.json({
+        items: items,
+        marker: nextMarker
+      });
     } else {
       console.log(respInfo.statusCode);
       console.log(respBody);
     }
   });
-}
+});
+
+app.get('/api/uptoken', function(req, res) {
+  //    res.send('Hello World!');
+
+  let token = putPolicy.uploadToken(mac);
+  res.header("Cache-Control", "max-age=0, private, must-revalidate");
+  res.header("Pragma", "no-cache");
+  res.header("Expires", 0);
+  if(token) {
+    res.json({
+      uptoken: token,
+      domain: config.Domain
+    });
+  }
+});
+
+let server = app.listen(3000, function() {
+  let host = server.address().address;
+  let port = server.address().port;
+
+  console.log('Example app listening at http://%s:%s', host, port);
+});

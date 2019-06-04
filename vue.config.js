@@ -73,6 +73,7 @@ module.exports = {
       .set('~models', resolve('src/models'))
       .set('~utils', resolve('src/models/utils'))
       .set('~components', resolve('src/components'))
+      .set('~assets', resolve('src/assets'))
       .set('~modules', resolve('src/models/services/modules'))
       .set('~config', resolve('src/config'))
       .set('~views', resolve('src/views'))

@@ -65,6 +65,9 @@
 .w-30{
   width: 30% !important;
 }
+.w-33{
+  width: 33.33% !important;
+}
 .w-40{
   width: 30% !important;
 }
@@ -81,4 +84,11 @@
 .head-img-size{
   width: 45px;
   height: 45px;
+}
+
+.pt-100{
+  padding-top: 100%;
+}
+.top-0{
+  top: 0;
 }

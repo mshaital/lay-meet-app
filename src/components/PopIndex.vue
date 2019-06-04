@@ -1,7 +1,7 @@
 <template>
   <van-popup v-model="showPop" position="left">
     <div class="bg-light pop-home">
-      <div class="pop-home-head">
+      <div class="pop-home-head" :class="{'bg-img': userInfo.bg_img===''}">
         <router-link to="/User" size="mini">
           <img class="rounded-circle border mx-auto d-block" :src="userInfo.head_img" alt="240">
         </router-link>
@@ -124,13 +124,15 @@
 
 <style lang="scss" scoped>
 
+  .bg-img{
+    background-image: url(../assets/img/banner-index.jpg);
+  }
   .pop-home {
     width: 18rem;
     height: 100vh;
     .pop-home-head {
       height: 200px;
       padding-top: 70px;
-      background-image: url(../assets/img/banner-index.jpg);
       img {
         width: 60px;
         height: 60px;

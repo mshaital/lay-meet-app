@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="header">
+    <div class="header" :class="{'bg-img': userInfo.bg_img===''}">
       <div class="back">
         <van-icon name="arrow-left" class="font-white" @click="$router.push('/')"/>
       </div>
@@ -8,7 +8,6 @@
     </div>
     <div  class="d-flex justify-content-between">
       <div class="account">{{userInfo.nick || userInfo.account}}</div>
-
       <div class="m-3">
         <span class="edit"><van-icon name="qr" /></span>
         <span class="edit" @click="goSetting"><van-icon name="edit" /></span>
@@ -77,10 +76,12 @@
   }
 </script>
 <style lang="scss" scoped>
+  .bg-img{
+    background-image: url(../../assets/img/banner-index.jpg);
+  }
 
 .header{
   height: 170px;
-  background-image: url(../../assets/img/banner-index.jpg);
   background-size: cover;
   position: relative;
   padding-top: 15px;

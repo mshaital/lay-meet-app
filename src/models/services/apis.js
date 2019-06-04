@@ -44,10 +44,20 @@ const getUserDynamic = '/api/user/getUserDynamic' // 查询动态
 
 
 
+
+const upload = '/api/img/upload' // 查询动态
+const getImgUploadToken = '/api/upload/getToken' //
+
+
+
 /**
  * 分离的接口与其缩写列表
  */
 export default {
+  upload,
+  getImgUploadToken,
+
+
   userRegister,
   getAllArticle,
   getArticleDetailsAndAuthorInfo,

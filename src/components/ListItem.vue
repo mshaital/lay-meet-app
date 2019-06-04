@@ -2,7 +2,7 @@
   <div class="mt-1 bg-white pt-2">
     <div class="d-flex pl-2 pr-2">
       <div class="head-img-size mr-3 d-flex" @click="goAuthor">
-        <img class="align-self-center rounded-circle img-fluid" :src="inValue.head_img">
+        <img class="align-self-center rounded-circle img-fluid" :src="inValue.head_img || '../img/head.png'">
       </div>
       <div class="w-100">
         <div class="font-18 w-100 d-flex justify-content-between position-relative">
@@ -28,7 +28,13 @@
     </div>
     <div class="border-bottom" @click="goContent">
       <div class="text-truncate p-2">{{inValue.content}}</div>
-      <img class="w-100" src="../assets/img/banner-5.png">
+      <div  class="d-flex flex-wrap mx-auto">
+        <div v-for="item in imgList" :class="{ 'w-80': imgList===1, 'w-50': imgList > 2 && imgList <= 4, 'w-33': imgList >= 5 }" class="p-1">
+          <div class="pt-100 w-100 position-relative">
+            <van-image class="position-absolute top-0" width="100%" height="100%" fit="cover" :src="examplePicture"/>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="font-grey pt-1 pb-1 pr-2 pl-2">
       <span class="pr-3">
@@ -51,6 +57,8 @@
   /* eslint-disable */
   import coopService from '~modules/coopService'
   import cache from '~utils/cache'
+  import examplePicture from '~assets/img/banner-5.png'
+//  import examplePicture from '~assets/img/login-bg.jpg'
 
   import moment from 'moment'
   moment.locale('zh-cn')
@@ -72,8 +80,10 @@
     },
     data () {
       return {
+        imgList: 9,
         showPop: false,
         isUserFollow: false,
+        examplePicture: examplePicture
       }
     },
     created () {

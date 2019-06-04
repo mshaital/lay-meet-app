@@ -2,7 +2,7 @@
   <div class="">
     <van-skeleton title avatar :row="9" :loading="showSkeleton">
 
-    <div class="header">
+    <div class="header" :class="{'bg-img': userInfo.bg_img===''}">
       <div class="d-flex justify-content-between">
         <div class="back">
           <van-icon name="arrow-left" class="font-white" @click="$router.push('/')"/>
@@ -195,9 +195,11 @@
 <style lang="scss" scoped>
 
 
+  .bg-img{
+    background-image: url(../../assets/img/banner-index.jpg);
+  }
   .header{
     height: 170px;
-    background-image: url(../../assets/img/banner-index.jpg);
     background-size: cover;
     position: relative;
     padding-top: 15px;

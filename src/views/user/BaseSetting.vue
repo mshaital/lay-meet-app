@@ -39,6 +39,7 @@
   import Util from '~utils/Util'
   import coopService from '~modules/coopService'
   import { Toast } from 'vant'
+  import * as qiniu from 'qiniu-js'
 
   export default {
     components: {
@@ -50,8 +51,41 @@
       }
     },
     methods: {
+      uploadImg(token, file) {
+        const key = file.name  // 上传后文件资源名以设置的 key 为主，如果 key 为 null 或者 undefined，则文件资源名会以 hash 值作为资源名。
+        let config = {
+          useCdnDomain: true,   //表示是否使用 cdn 加速域名，为布尔值，true 表示使用，默认为 false。
+          region: qiniu.region.z0     // 根据具体提示修改上传地区,当为 null 或 undefined 时，自动分析上传域名区域
+        };
+
+        let putExtra = {
+          fname: "",  //文件原文件名
+          params: {}, //用来放置自定义变量
+          mimeType: null  //用来限制上传文件类型，为 null 时表示不对文件类型限制；限制类型放到数组里： ["image/png", "image/jpeg", "image/gif"]
+        };
+        let observable = qiniu.upload(file, key, token, putExtra, config);
+        observable.subscribe({
+          next: (res) => {
+            let total = res.total;
+             console.log(res)
+             console.log("进度：" + parseInt(total.percent) + "% ")
+          },
+          error: (err) => {
+            console.log(err)
+          },
+          complete: (res) => {
+            console.log(res.hash)
+          }
+        })
+      },
       onRead (file) {
         this.userInfo.head_img = Util.Util.onUpload(file)
+        let params = {}
+        let _this = this
+//        coopService.getToken(params).then(res => {
+//         console.log(res)
+//          _this.uploadImg(res,file.file)
+//        })
       },
 
       userModify () {
