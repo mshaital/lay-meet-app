@@ -17,9 +17,9 @@
         </span>
       </div>
       <div class="bg-white p-1 font-16 clearfix">
-        <div class="float-left p-1" v-for="(item, index) in hotList" :key="index">
-          <van-icon class="align-middle" name="fire" color="red"/>
-          <span>{{item}}</span>
+        <div class="float-left pl-2 pr-2 btn-info rounded-pill mt-1 mr-1" v-for="(item, index) in hotList" :key="index">
+          <van-icon class="align-middle" name="fire" color="#959595"/>
+          <span class="font-14"> {{ item}}</span>
         </div>
 
       </div>

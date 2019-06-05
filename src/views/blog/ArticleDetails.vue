@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div class="item-content border-bottom" @click="">
+        <div class="item-content border-bottom">
           <p class="hide-text mt-2">{{articleInfo.content}}</p>
           <img src="../../assets/img/banner-5.png">
         </div>
@@ -47,8 +47,8 @@
         <span class="align-middle">阅读 {{articleInfo.read_num}}</span>
         <span class="align-middle float-right">分享 {{articleInfo.read_num}}</span>
       </div>
-      <div>
-        <div class="comment white-bg" v-if="articleInfo.comment" v-for="item in articleInfo.comment" :key="item.index">
+      <div v-if="articleInfo.comment" >
+        <div class="comment white-bg" v-for="item in articleInfo.comment" :key="item.index">
           <div class="item-head">
             <div class="item-head-img" @click="goAuthor">
               <img class="img-fluid" src="../../assets/img/head.png">
@@ -69,6 +69,8 @@
         </div>
       </div>
     </van-skeleton>
+
+    <add-animate ref="animate"></add-animate>
 
     <div class="footer align-middle d-flex align-items-center bg-white" @click="showCreatedComment=true">
       <img class="rounded-circle" :src="userInfo.head_img">
@@ -92,15 +94,18 @@
 
 <script>
   /* eslint-disable */
+
   import xss from 'xss'
   import coopService from '~modules/coopService'
   import {Toast} from 'vant'
+  import AddAnimate from '~components/AddAnimate'
 
   import moment from 'moment'
+
   moment.locale('zh-cn')
 
   export default {
-    components: {},
+    components: {AddAnimate},
     data () {
       return {
         showSkeleton: true,
@@ -111,8 +116,6 @@
         articleAccount: '',
         showCreatedComment: false,
         isUserFollow: false,
-        animate: 'd-none',
-        animateSrc: '../../../static/img/likes.png',
         articleInfo: {
           comment: []
         },
@@ -132,18 +135,7 @@
     methods: {
       goAuthor () {
       },
-      addAnimated (src) {
-        let _this = this
-        _this.animateSrc = '../../../static/img/' + src + '.png'
-        _this.animate = 'jackInTheBox'
-        console.log(_this.animateSrc)
-        setTimeout(function () {
-          _this.animate = 'zoomOut'
-        }, 1000)
-        setTimeout(function () {
-          _this.animate = 'd-none'
-        }, 2000)
-      },
+
       addRead () {
         let paramsData = this.$route.params
         if (!paramsData) return
@@ -207,12 +199,14 @@
         console.log(this.articleInfo)
         coopService[this.showBookMark ? 'deleteBookmarks' : 'createBookmarks'](params).then(res => {
           if (res !== 'SUCCESS') return
+          if(!this.showBookMark) _this.$refs.animate.addAnimated()
           // 更新Storage中的bookmark
           let bookMark = _this.userInfo.bookmarks
           this.showBookMark ? bookMark.splice(bookMark.indexOf(params.articleId), 1) : bookMark.push(params.articleId)
           // 将按钮转换为取消收藏
           _this.showBookMark = !_this.showBookMark
           _this.$store.commit('SET_USER_INFO', _this.userInfo)
+
         })
       },
       // 关注作者/取消

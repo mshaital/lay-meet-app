@@ -49,6 +49,9 @@
         <van-icon class="align-middle" name="share" size="18px"/>
       </span>
     </div>
+
+    <add-animate ref="animate"></add-animate>
+
   </div>
 
 </template>
@@ -58,13 +61,14 @@
   import coopService from '~modules/coopService'
   import cache from '~utils/cache'
   import examplePicture from '~assets/img/banner-5.png'
-//  import examplePicture from '~assets/img/login-bg.jpg'
+  import AddAnimate from '~components/AddAnimate'
+
 
   import moment from 'moment'
   moment.locale('zh-cn')
 
   export default {
-    components: {},
+    components: {AddAnimate},
     name: 'ListItem',
     props: {
       inValue: {
