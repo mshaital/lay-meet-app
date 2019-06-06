@@ -18,6 +18,8 @@ const loginSchema = mongoose.Schema({
   user_id: String,
   account: String,
   password: String,
+  email: String,
+  cell_phone_num: String,
   nick: String,
   register_date: String,
   birthday: Date,

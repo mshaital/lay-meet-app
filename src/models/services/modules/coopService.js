@@ -142,4 +142,7 @@ export default {
   saveComplaintSuggestion (params) {
     return AxiosManager.post(Apis.saveComplaintSuggestion, params)
   },
+  changePassword (params) {
+    return AxiosManager.post(Apis.changePassword, params)
+  },
 }

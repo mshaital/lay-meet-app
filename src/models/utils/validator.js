@@ -76,24 +76,6 @@ let validationStrategies = {
     }
   },
 
-  height: function(errMsg, value) {
-    if (Util.Util.isEmpty(value)) return
-    if (value === '0.0') return
-    if (typeof value !== 'number') value = parseFloat(value)
-    if ( value < 10 || value > 300) {
-      return this.buildInvalidObj(errMsg, value)
-    }
-  },
-
-  weight: function(errMsg, value) {
-    if (Util.Util.isEmpty(value)) return
-    if (value === '0.0') return
-    if (typeof value !== 'number') value = parseFloat(value)
-    if (value < 0 || value > 1000) {
-      return this.buildInvalidObj(errMsg, value)
-    }
-  },
-
   maxLength: function(errMsg, value, length) {
     if (Util.Util.isEmpty(value)) return
     if (value.length > length) {
@@ -118,9 +100,8 @@ let validationStrategies = {
       return this.buildInvalidObj(errMsg, value)
     }
   },
-  isPhoneOrEmail: function(errMsg, value) {
+  isEmail: function(errMsg, value) {
     if (Util.Util.isEmpty(value)) return
-    let mobileReg = /^1\d{10}$/
     let emailReg = /^[a-z0-9](\w|\.|-)*@([a-z0-9]+-?[a-z0-9]+\.){1,3}[a-z]{2,4}$/
     if (!mobileReg.test(value) && !emailReg.test(value)) {
       return this.buildInvalidObj(errMsg, value)
@@ -133,15 +114,6 @@ let validationStrategies = {
       return this.buildInvalidObj(errMsg, value)
     }
   },
-  isSpareConnection: function(errMsg, value) {
-    if (Util.Util.isEmpty(value)) return
-    let reg = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/
-    let regPhone = /^1\d{10}$/
-    if (!reg.test(value) && !regPhone.test(value)) {
-      return this.buildInvalidObj(errMsg, value)
-    }
-  },
-
   isTrue: function(errMsg, value) {
     if (!value) {
       return this.buildInvalidObj(errMsg, value)

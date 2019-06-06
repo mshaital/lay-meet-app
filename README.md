@@ -36,7 +36,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     类似于微博的移动端应用 建立之初是为了学习nodejs 后来工作之余也不断完善
     目前很多功能没有实现
     还没部署所以不能在线预览
-    没有建立图片服务器 图片上传功能不完善
     借鉴了部分微博的设计风格
     项目为业余之间编写功能尚不完善 有问题欢迎给我提issue
 ```
@@ -153,3 +152,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
     2019/5/31
     增加夜间模式
+
+    2019/6/5
+    增加图片存储服务器（感谢七牛云提供免费对象存储服务器）
+    增加可以更改头像
+    增加文章上传图片（最多可传9张）

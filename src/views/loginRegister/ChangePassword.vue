@@ -1,34 +1,35 @@
 <template>
-  <div class="p-3">
-    <div class="p-4 mr-4 ml-4">
-      <img class="img-fluid" src="../../assets/img/logo.png">
-    </div>
-    <div class="">
-      <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-white font-grey font-14">
-        <span>用户名</span>&emsp;
-        <input class="border-0" v-model="ruleForm.userName" placeholder="请输入用户名"/>
+  <div class="">
+    <nav-title title="找回密码" ></nav-title>
+
+    <div class="p-3 m-3">
+      <div class="mt-2">
+        <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
+          <span>账号</span>&emsp;
+          <input class="border-0 bg-light-grey" v-model="ruleForm.userName" placeholder="请输入用户名"/>
+        </div>
+        <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
+          <span>邮箱</span>&emsp;
+          <input class="border-0 bg-light-grey" v-model="ruleForm.userPass" placeholder="请输入密码"/>
+        </div>
       </div>
-      <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-white font-grey font-14">
-        <span>密码</span>&emsp;
-        <input class="border-0" v-model="ruleForm.userPass" placeholder="请输入密码"/>
+      <div class="mt-3 d-flex justify-content-around">
+        <van-button type="" @click="changePassword" round class=" btn-info border-0 w-100">修改密码</van-button>
       </div>
-      <div class="text-info text-right font-14" @click="goChangePassword()">找回密码 </div>
     </div>
-    <div class="button-group d-flex justify-content-around">
-      <van-button type="default" @click="submitForm" round class="w-40">登录</van-button>
-      <!--<van-button type="primary" @click="resetForm()" round>忘记密码</van-button>-->
-      <van-button type="" @click="goRegister" round  class="w-40 btn-info border-0">注册</van-button>
-    </div>
+
   </div>
 </template>
 
 <script>
   import coopService from '~modules/coopService'
   import newValidator from '~utils/validator'
+  import NavTitle from '~components/NavTitle'
+
 
   /* eslint-disable */
   export default {
-    components: {},
+    components: {NavTitle},
     data () {
       return {
         showError: false,
@@ -43,8 +44,12 @@
       this.$store.commit('SET_TOKEN', '')
     },
     methods: {
-      goChangePassword() {
-        this.$router.push({name: `ChangePassword`})
+      changePassword() {
+        let data = {
+        }
+        coopService.changePassword(data).then(res => {
+          console.log(res)
+        })
       },
       submitForm () {
         let _this = this
@@ -82,12 +87,4 @@
 </script>
 <style lang="scss" scoped>
 
-  .button-group{
-    margin-top: 30px;
-  }
-  h2 {
-    color: #85898f;
-    text-align: center;
-    margin-bottom: 50px;
-  }
 </style>

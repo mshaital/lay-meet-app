@@ -43,6 +43,9 @@ const saveComplaintSuggestion = '/api/sys/check/saveComplaintSuggestion' // 投�
 const getUserDynamic = '/api/user/getUserDynamic' // 查询动态
 
 
+const changePassword = '/api/login/changePassword' // 更改密码
+
+
 
 
 const upload = '/api/img/upload' // 查询动态
@@ -96,4 +99,6 @@ export default {
   getAuthorListById,
 
   saveComplaintSuggestion,
+
+  changePassword,
 }

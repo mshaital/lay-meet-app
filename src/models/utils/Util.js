@@ -5,7 +5,7 @@
 'use strict'
 /* eslint-disable */
 import coopService from '~modules/coopService'
-import store from '../../store/index'
+import store from '@/store/index'
 import {Toast} from 'vant';
 import * as qiniu from 'qiniu-js'
 
@@ -112,7 +112,37 @@ const Util = {
       }
     })
   },
-
+  // 创建收藏
+  createBookmarks (params, callBack) {
+    let _this = this
+    coopService .createBookmarks(params).then(res => {
+      if (res !== 'SUCCESS') return
+      // 更新Storage中的bookmark
+      let bookMark = store.state.userInfo.bookmarks
+      let bookmarkItem = {
+        article_id: params.articleId,
+        author_id: params.authorId,
+        create_date: new Date(),
+      }
+      bookMark.push(bookmarkItem)
+      store.commit('SET_USER_INFO', _this.userInfo)
+      callBack()
+    })
+  },
+  deleteBookmarks (params, callBack) {
+    let _this = this
+    coopService.deleteBookmarks(params).then(res => {
+      if (res !== 'SUCCESS') return
+      // 更新Storage中的bookmark
+      let bookMark = store.state.userInfo.bookmarks
+      bookMark.splice(bookMark.indexOf(params.articleId), 1)
+      store.state.userInfo.bookmarks = bookMark.map((item, index) => {
+        if (item.articleId === params.articleId) bookMark.splice(index,1);
+      })
+      store.commit('SET_USER_INFO', _this.userInfo)
+      callBack()
+    })
+  },
 }
 
 export default {Util}

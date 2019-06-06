@@ -1,15 +1,8 @@
 <template>
   <div class="bg-light-grey">
-    <van-nav-bar
-        :title="authorInfo.nick || authorInfo.account"
-        left-text=""
-        right-text=""
-        left-arrow
-        @click-left="$router.go(-1)"
-    >
-    </van-nav-bar>
-    <van-skeleton title avatar :row="7" :loading="showSkeleton">
+    <nav-title :title="authorInfo.nick || authorInfo.account"></nav-title>
 
+    <van-skeleton title avatar :row="7" :loading="showSkeleton">
       <div class="list-item bg-white">
         <div class="item-head">
           <div class="item-head-img" @click="goAuthor">
@@ -34,8 +27,8 @@
           <img src="../../assets/img/banner-5.png">
         </div>
         <div class="d-flex justify-content-around p-2">
-          <van-icon :name="showBookMark?'like':'like-o'" :color="showBookMark?'#ff530b':''" size="20px"
-                    @click="isLike"/>
+          <van-icon v-if="showBookMark" name="like-o"size="20px" @click="createBookmarks"/>
+          <van-icon name="like" color="#ff530b" size="20px" v-else @click="deleteBookmarks"/>
           <van-icon name="comment-o" size="20px" @click="showCreatedComment=true"/>
           <van-icon name="share" size="20px"/>
         </div>
@@ -99,13 +92,16 @@
   import coopService from '~modules/coopService'
   import {Toast} from 'vant'
   import AddAnimate from '~components/AddAnimate'
+  import NavTitle from '~components/NavTitle'
 
+  import UTIL from '~utils/Util'
+  import { Dialog } from 'vant';
   import moment from 'moment'
 
   moment.locale('zh-cn')
 
   export default {
-    components: {AddAnimate},
+    components: {AddAnimate,NavTitle},
     data () {
       return {
         showSkeleton: true,
@@ -126,11 +122,6 @@
     created () {
       this.getContent()
       this.addRead()
-    },
-    filters: {
-      dateChange (value) {
-        return moment(value).format('YYYY-MM-DD')
-      }
     },
     methods: {
       goAuthor () {
@@ -189,25 +180,38 @@
           Toast('评论成功')
         })
       },
-      // 点赞/取消
-      isLike () {
+      // 添加收藏
+      createBookmarks () {
         let _this = this
         let params = {
           articleId: this.articleInfo.article_id,
           authorId: this.articleInfo.user.user_id
         }
-        console.log(this.articleInfo)
-        coopService[this.showBookMark ? 'deleteBookmarks' : 'createBookmarks'](params).then(res => {
-          if (res !== 'SUCCESS') return
-          if(!this.showBookMark) _this.$refs.animate.addAnimated()
-          // 更新Storage中的bookmark
-          let bookMark = _this.userInfo.bookmarks
-          this.showBookMark ? bookMark.splice(bookMark.indexOf(params.articleId), 1) : bookMark.push(params.articleId)
-          // 将按钮转换为取消收藏
+        UTIL.Util.createBookmarks(params,()=> {
+          _this.$refs.animate.addAnimated()
           _this.showBookMark = !_this.showBookMark
-          _this.$store.commit('SET_USER_INFO', _this.userInfo)
 
         })
+      },
+      // 取消收藏
+      deleteBookmarks () {
+        let _this = this
+        Dialog.confirm({
+          title: '',
+          message: '确认取消？',
+          confirmButtonColor: '#17a2b8'
+        }).then(() => {
+          let params = {
+            articleId: this.articleInfo.article_id,
+            authorId: this.articleInfo.user.user_id
+          }
+          UTIL.Util.deleteBookmarks(params,()=> {
+            _this.showBookMark = !_this.showBookMark
+          })
+        }).catch(() => {
+          // on cancel
+        });
+
       },
       // 关注作者/取消
       isFollow () {

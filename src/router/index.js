@@ -21,6 +21,8 @@ import NotFoundComponent from '@/views/public/NotFoundComponent'
 import Drafts from '@/views/blog/Drafts'
 
 import SearchAuthorByTitle from '@/views/Author/SearchAuthorByTitle'
+import ChangePassword from '@/views/loginRegister/ChangePassword'
+
 
 Vue.use(Router)
 
@@ -120,6 +122,11 @@ export default new Router({
       path: '/BrowseRecord',
       name: 'BrowseRecord',
       component: BrowseRecord
+    },
+    {
+      path: '/ChangePassword',
+      name: 'ChangePassword',
+      component: ChangePassword
     },
     {
       path: '*',

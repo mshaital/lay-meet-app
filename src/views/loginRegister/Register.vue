@@ -5,17 +5,25 @@
     </div>
     <div class="form-group">
       <div class="form-input">
-        <span>用户名</span>
+        <span>账号</span>&emsp;
         <input v-model="submitForm.userName" placeholder="请输入用户名"/>
       </div>
       <div class="form-input">
-        <span>密码</span>
+        <span>密码</span>&emsp;
         <input v-model="submitForm.userPass" placeholder="请输入密码"/>
       </div>
-      <div class="form-input" @click="showPicker=!showPicker">
-        <span class="">生日</span>&emsp;
-        <input v-model="birthday" placeholder="请输入密码" disabled/>
+      <div class="form-input">
+        <span>邮箱</span>&emsp;
+        <input v-model="submitForm.email" placeholder="请输入邮箱"/>
       </div>
+      <div class="form-input">
+        <span>手机</span>&emsp;
+        <input v-model="submitForm.cellPhoneNum" placeholder="请输入手机号"/>
+      </div>
+      <!--<div class="form-input" @click="showPicker=!showPicker">-->
+        <!--<span class="">生日</span>&emsp;-->
+        <!--<input v-model="birthday" placeholder="请输入密码" disabled/>-->
+      <!--</div>-->
       <div class="form-input">
         <van-radio-group v-model="submitForm.sex" class="d-flex justify-content-around">
           <van-radio name="m">小哥哥</van-radio>
@@ -55,6 +63,8 @@
         submitForm: {
           userName: '',
           userPass: '',
+          email: '',
+          cellPhoneNum: '',
           reUserPass: '',
           birthday: new Date(),
           sex: 'm',
@@ -78,7 +88,11 @@
           ['minLength:5', '用户名不得小于5个字符', submitForm.userName],
           ['isNoEmpty', '请填写密码', submitForm.userPass],
           ['maxLength:15', '密码不得大于15个字符', submitForm.userPass],
-          ['minLength:5', '密码不得小于5个字符', submitForm.userPass]
+          ['minLength:5', '密码不得小于5个字符', submitForm.userPass],
+          ['isNoEmpty', '请填写邮件地址', submitForm.email],
+          ['isEmail', '邮件地址不正确', submitForm.email],
+          ['isNoEmpty', '请填写手机号', submitForm.cellPhoneNum],
+          ['isPhoneNum', '手机号不正确', submitForm.cellPhoneNum]
         ]
 
         let validators = newValidator.newValidator
@@ -129,6 +143,6 @@
     text-align: center;
     font-size: 20px;
     color: white;
-    background-color: #2a7d6b;
+    background-color: #17a2b8;
   }
 </style>

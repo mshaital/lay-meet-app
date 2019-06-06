@@ -27,29 +27,13 @@ app.set('jwtTokenSecret', config.jwtTokenSecret)
 const qnConfig = require('./config/qn-config')
 const fs = require('fs');
 const qiniu = require('qiniu');
+const nodemailer = require('./utils/nodemailer')
 
 
 
 router.use((req, res, next) => {
   console.log('=========================' + req.url + '=========================')
   next()
-})
-
-/**
- * @description 获取上传图片凭证
- * @return {String} uploadToken
- */
-router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
-  let accessKey = qnConfig.AccessKey;
-  let secretKey = qnConfig.SecretKey;
-
-  let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-  let options = {
-    scope: qnConfig.Bucket,
-  };
-  let putPolicy = new qiniu.rs.PutPolicy(options);
-  let uploadToken=putPolicy.uploadToken(mac);
-  next({message: config.RES_MSE.SUCCESS_MSG, data: uploadToken, code: config.RES_DATA_CODE.SUCCESS_CODE})
 })
 
 /**
@@ -62,6 +46,8 @@ router.post('/api/login/userRegister', (req, res, next) => {
     user_id: user_id,
     account: req.body.userName,
     password: req.body.userPass,
+    email: req.body.email,
+    cell_phone_num: req.body.cellPhoneNum,
     sex: req.body.sex,
     birthday: req.body.birthday,
     register_date: (new Date()).valueOf(),
@@ -694,7 +680,7 @@ router.post('/api/user/check/createBookmarks', [jwtauth], (req, res, next) => {
     create_date: new Date(),
   }
 
-  models.Login.update({user_id: userId}, {$push: {bookmarks: bookmark}}, {upsert: true}, (err, data) => {
+  models.Login.update({user_id: userId}, {$addToSet: {bookmarks: bookmark}}, {upsert: true}, (err, data) => {
     if (err) {
       Util.failHand(res,err)
       return
@@ -716,8 +702,8 @@ router.post('/api/user/check/createBookmarks', [jwtauth], (req, res, next) => {
     }
   })
 
-  let dynamicInfo = '收藏了文章 '
-  Util.saveDynamic(req.userId, dynamicInfo, req.body.articleTitle)
+  // let dynamicInfo = '收藏了文章 '
+  // Util.saveDynamic(req.userId, dynamicInfo, req.body.articleTitle)
 })
 
 /**
@@ -1302,6 +1288,35 @@ router.post('/api/user/getPrivateLetterList', [jwtauth], (req, res, next) => {
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
     })
 })
+
+
+/**
+ * @description 获取上传图片凭证
+ * @return {String} uploadToken
+ */
+router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
+  let accessKey = qnConfig.AccessKey;
+  let secretKey = qnConfig.SecretKey;
+
+  let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+  let options = {
+    scope: qnConfig.Bucket,
+  };
+  let putPolicy = new qiniu.rs.PutPolicy(options);
+  let uploadToken=putPolicy.uploadToken(mac);
+  next({message: config.RES_MSE.SUCCESS_MSG, data: uploadToken, code: config.RES_DATA_CODE.SUCCESS_CODE})
+})
+
+/**
+ * @description 更改密码
+ * @return {String} uploadToken
+ */
+router.post('/api/login/changePassword', (req, res, next) => {
+  console.log('changePassword')
+  nodemailer().catch(console.error)
+  next({message: config.RES_MSE.SUCCESS_MSG, data: config.RES_DATA_MSG.SUCCESS_MSG, code: config.RES_DATA_CODE.SUCCESS_CODE})
+})
+
 
 router.use((info, req, res, next) => {
   res.status(200).json({message: info.message, content: info.data, statusCode: info.code})
