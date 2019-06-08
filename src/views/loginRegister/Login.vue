@@ -44,7 +44,7 @@
     },
     methods: {
       goChangePassword() {
-        this.$router.push({name: `ChangePassword`})
+        this.$router.push({name: `CheckEmail`})
       },
       submitForm () {
         let _this = this

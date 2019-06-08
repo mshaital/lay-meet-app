@@ -5,11 +5,15 @@
     <div class="p-3 m-3">
       <div class="mt-2">
         <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
-          <span>账号</span>&emsp;
-          <input class="border-0 bg-light-grey" v-model="ruleForm.userName" placeholder="请输入用户名"/>
+          <span>验证码</span>&emsp;
+          <input class="border-0 bg-light-grey" v-model="ruleForm.code" placeholder="请输入验证码"/>
         </div>
         <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
-          <span>邮箱</span>&emsp;
+          <span>新密码</span>&emsp;
+          <input class="border-0 bg-light-grey" v-model="ruleForm.userPass" placeholder="请输入密码"/>
+        </div>
+        <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
+          <span>重复新密码</span>&emsp;
           <input class="border-0 bg-light-grey" v-model="ruleForm.userPass" placeholder="请输入密码"/>
         </div>
       </div>
@@ -18,6 +22,10 @@
       </div>
     </div>
 
+
+
+
+
   </div>
 </template>
 
@@ -25,7 +33,7 @@
   import coopService from '~modules/coopService'
   import newValidator from '~utils/validator'
   import NavTitle from '~components/NavTitle'
-
+  import { Dialog } from 'vant';
 
   /* eslint-disable */
   export default {
@@ -40,8 +48,9 @@
       }
     },
     created(){
-      this.$store.commit('SET_USER_INFO', {})
-      this.$store.commit('SET_TOKEN', '')
+      Dialog.alert({
+        message: '邮件已发送请去邮件中复制验证码'
+      }).then(() => { });
     },
     methods: {
       changePassword() {
