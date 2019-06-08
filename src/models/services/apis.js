@@ -35,7 +35,7 @@ const getPrivateLetterList = '/api/user/getPrivateLetterList' // 查询私信列
 
 const getAuthorInfo = '/api/login/getAuthorInfo' // 获取用户信息
 const userInfoModify = '/api/user/check/userInfoModify' // 修改用户信息
-const userModifyHeadImg = '/api/user/userModifyHeadImg' // 修改用户信息
+const userModifyHeadImg = '/api/user/userModifyHeadImg' // 修改用户头像
 
 const getAuthorListById = '/api/login/getAuthorListById' // 按user_id查询用户信息列表 （公开）（查询浏览记录）
 

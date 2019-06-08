@@ -1,10 +1,10 @@
 /**
  * Created by dell on 2018/1/26.
  */
-let userName = ''
 
 const resourceConfig = {
   baseUrl: '',
+  imgBaseUrl: 'http://psihuu91x.bkt.clouddn.com/',
   SUCCESS: 100,
   // http请求
   httpOptions: {
@@ -14,5 +14,4 @@ const resourceConfig = {
 }
 export default {
   resourceConfig,
-  userName
 }

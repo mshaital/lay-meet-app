@@ -3,7 +3,7 @@
     <div class="bg-light pop-home">
       <div class="pop-home-head" :class="{'bg-img': userInfo.bg_img===''}">
         <router-link to="/User" size="mini">
-          <img class="rounded-circle border mx-auto d-block" :src="userInfo.head_img" alt="240">
+          <img class="rounded-circle border mx-auto d-block" :src="userInfo.head_img || HeadImg" alt="240">
         </router-link>
         <div class="font-white pl-3 pt-4 font-weight-bold">{{userInfo.nick || userInfo.account}}</div>
       </div>
@@ -55,12 +55,14 @@
 
   import Cache from '~utils/cache';
   import THEME from '~config/theme'
+  import HeadImg from '~assets/img/head.png'
 
   export default {
     components: {},
     name: 'NavIndex',
     data () {
       return {
+          HeadImg,
         checked: true,
         showPop: this.value,
         userInfo: this.$store.state.userInfo,

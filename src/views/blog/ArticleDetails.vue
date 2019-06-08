@@ -67,7 +67,7 @@
 
     <div class="footer align-middle d-flex align-items-center bg-white" @click="showCreatedComment=true">
       <img class="rounded-circle" :src="userInfo.head_img">
-      <span class="font-grey font-14"> 添加评论...</span>
+      <span class="font-grey font-14 pl-2"> 添加评论...</span>
     </div>
     <van-popup v-model="showCreatedComment" position="bottom">
       <div class="com-popup">

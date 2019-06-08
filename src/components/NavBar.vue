@@ -1,8 +1,8 @@
 <template>
   <van-tabbar v-model="active" @change="changeComponents">
-    <van-tabbar-item icon="wap-home"></van-tabbar-item>
-    <van-tabbar-item icon="friends-o" dot ></van-tabbar-item>
-    <van-tabbar-item icon="bell" info="20"></van-tabbar-item>
+    <van-tabbar-item icon="wap-home" size="20"></van-tabbar-item>
+    <van-tabbar-item icon="friends-o" dot  size="20"></van-tabbar-item>
+    <van-tabbar-item icon="bell" info="20" size="20"></van-tabbar-item>
   </van-tabbar>
 </template>
 

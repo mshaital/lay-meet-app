@@ -3,7 +3,7 @@
     <nav-title title="个人资料" rightText="保存" @right-click="userModify"></nav-title>
     <div class="mt-5">
       <div class="head-img mx-auto d-block">
-        <!--<img :src="userInfo.head_img">-->
+        <img :src="userInfo.head_img || HeadImg">
         <van-uploader class="upload-img" :after-read="onRead">
           <van-icon name="photograph" color="#1989fa"/>
         </van-uploader>
@@ -36,9 +36,11 @@
   /* eslint-disable */
   import NavTitle from '~components/NavTitle'
   import newValidator from '~utils/validator'
+  import Config from '~config/config'
   import Util from '~utils/Util'
   import coopService from '~modules/coopService'
   import {Toast} from 'vant'
+  import HeadImg from '~assets/img/head.png'
   import * as qiniu from 'qiniu-js'
 
   export default {
@@ -47,13 +49,26 @@
     },
     data () {
       return {
+          HeadImg,
         userInfo: this.$store.state.userInfo,
       }
     },
     methods: {
       onRead (file) {
+          let _this = this
         Util.Util.asyncUploadImg(file, 70, 70, .5, res => {
-          console.log(res)
+
+            let hash = res.hash
+            let params = {
+                userHeadImg: Config.resourceConfig.imgBaseUrl + res.hash
+            }
+            coopService.userModifyHeadImg(params).then(res => {
+                if (res !== 'SUCCESS') return
+                _this.userInfo.head_img = Config.resourceConfig.imgBaseUrl + hash
+                _this.$store.commit('SET_USER_INFO', _this.userInfo)
+                _this.$toast("头像更换成功")
+            })
+
         })
       },
 

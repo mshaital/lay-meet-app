@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="border-bottom" @click="goContent">
-      <div class="text-truncate p-2">{{inValue.content}}</div>
+      <div class="texts-truncate p-2">{{inValue.content}}</div>
       <div  class="d-flex flex-wrap mx-auto">
         <div v-for="item in imgList" :class="{ 'w-80': imgList===1, 'w-50': imgList > 2 && imgList <= 4, 'w-33': imgList >= 5 }" class="p-1">
           <div class="pt-100 w-100 position-relative">
@@ -155,6 +155,7 @@
       padding: 5px 15px;
       font-size: 14px;
     }
+
 
 
 </style>

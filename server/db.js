@@ -35,6 +35,7 @@ const loginSchema = mongoose.Schema({
   private_letter: Array,
   browse_record_article: {type: Array, default: new Array(50)},
   browse_record_user: {type: Array, default: new Array(50)},
+  email_pass_code: String,
 })
 
 const articleSchema = mongoose.Schema({
@@ -91,6 +92,7 @@ const routerSchema = mongoose.Schema({
   role: {type: String, default: 'admin'},
   router: {type: String, default: {path: '/Admin', name: 'Admin', component: (resolve) => require(['@/views/admin/Admin'], resolve)}}
 })
+
 
 /* ************* 定义模型Model ************* */
 const Models = {

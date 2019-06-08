@@ -103,7 +103,7 @@ let validationStrategies = {
   isEmail: function(errMsg, value) {
     if (Util.Util.isEmpty(value)) return
     let emailReg = /^[a-z0-9](\w|\.|-)*@([a-z0-9]+-?[a-z0-9]+\.){1,3}[a-z]{2,4}$/
-    if (!mobileReg.test(value) && !emailReg.test(value)) {
+    if ( !emailReg.test(value)) {
       return this.buildInvalidObj(errMsg, value)
     }
   },

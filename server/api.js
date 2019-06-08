@@ -24,7 +24,7 @@ const uuid = require('uuid')
 
 app.set('jwtTokenSecret', config.jwtTokenSecret)
 
-const qnConfig = require('./config/qn-config')
+const keyCode = require('./config/keycode')
 const fs = require('fs');
 const qiniu = require('qiniu');
 const nodemailer = require('./utils/nodemailer')
@@ -74,7 +74,7 @@ router.post('/api/login/getAccount', (req, res, next) => {
   let userPass = req.body.userPass
   models.Login.findOne(
     {account: userName, password: userPass},
-    {password: 0, dynamic: 0, private_letter: 0},
+    {password: 0, dynamic: 0, private_letter: 0,vemail_pass_code:0},
     (err, data) => {
       if (err) {
         Util.failHand(res,err)
@@ -1295,12 +1295,12 @@ router.post('/api/user/getPrivateLetterList', [jwtauth], (req, res, next) => {
  * @return {String} uploadToken
  */
 router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
-  let accessKey = qnConfig.AccessKey;
-  let secretKey = qnConfig.SecretKey;
+  let accessKey = keyCode.AccessKey;
+  let secretKey = keyCode.SecretKey;
 
   let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
   let options = {
-    scope: qnConfig.Bucket,
+    scope: keyCode.Bucket,
   };
   let putPolicy = new qiniu.rs.PutPolicy(options);
   let uploadToken=putPolicy.uploadToken(mac);
@@ -1313,8 +1313,69 @@ router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
  */
 router.post('/api/login/changePassword', (req, res, next) => {
   console.log('changePassword')
-  nodemailer().catch(console.error)
-  next({message: config.RES_MSE.SUCCESS_MSG, data: config.RES_DATA_MSG.SUCCESS_MSG, code: config.RES_DATA_CODE.SUCCESS_CODE})
+
+  let account = req.body.account
+  let email = req.body.email
+  let email_pass_code = uuid.v1();
+
+  let promise = new Promise((resolve, reject) => {
+    models.Login.findOne({'account': account}, {email: 1}, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        if (data.email === email){
+          console.log(444444)
+          resolve(data.email)
+        }else {
+          next({
+            message: config.RES_MSE.FAIL_MSG_EMAIL,
+            data: config.RES_DATA_MSG.FAIL_MSG_EMAIL,
+            code: config.RES_DATA_CODE.SUCCESS_CODE
+          })
+
+        }
+      }
+    })
+  })
+
+  promise.then(email => {
+
+    let opt = {
+      from: keyCode.emailUser, // list of receivers
+      to: email, // sender address
+      subject: "通知：重置您的密码", // Subject line
+      text: "Hello world?", // plain text body
+      html: `
+    <div style="padding: 30px;margin: 10px;background-color: #fafafa;border:1px solid #e1e1e1">
+      <h2 style="color: #17a2b8;text-align: center">Find</h2>
+      <p>尊敬的用户：</p>
+      <p>下列字符为用于更改密码的验证码请勿告诉他人。</p>
+      <p style="color: #17a2b8;font-size:20px">${email_pass_code}</p>
+      <p>谢谢！</p>
+      <p>Find 团队</p>
+      <p>需要帮助？</p>
+      <p>如在帐户方面需要帮助，请联系客户支持。</p>
+    </div>
+`
+    }
+    console.log(5555)
+
+    nodemailer(opt, info => {
+      models.Login.update({account: account}, {$set: {email_pass_code: email_pass_code}}, (err, data) => {
+        if (err) {
+          Util.failHand(res,err)
+          return
+        }
+        next({
+          message: config.RES_MSE.SUCCESS_MSG,
+          data: config.RES_DATA_MSG.SUCCESS_MSG,
+          code: config.RES_DATA_CODE.SUCCESS_CODE
+        })
+      })
+    }).catch(console.error)
+  }).catch((e) => {
+    // console.log('关注作者失败')
+  })
 })
 
 

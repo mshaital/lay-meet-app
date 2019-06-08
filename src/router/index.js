@@ -22,6 +22,7 @@ import Drafts from '@/views/blog/Drafts'
 
 import SearchAuthorByTitle from '@/views/Author/SearchAuthorByTitle'
 import ChangePassword from '@/views/loginRegister/ChangePassword'
+import CheckEmail from '@/views/loginRegister/CheckEmail'
 
 
 Vue.use(Router)
@@ -122,6 +123,11 @@ export default new Router({
       path: '/BrowseRecord',
       name: 'BrowseRecord',
       component: BrowseRecord
+    },
+    {
+      path: '/CheckEmail',
+      name: 'CheckEmail',
+      component: CheckEmail
     },
     {
       path: '/ChangePassword',

@@ -1,13 +1,6 @@
 <template>
   <div>
-    <van-nav-bar
-      title="标题"
-      left-text=""
-      right-text="按钮"
-      left-arrow
-      @click-left="onClickLeft"
-      @click-right="submitForm"
-    >
+    <van-nav-bar title="标题" left-text="" right-text="按钮" left-arrow @click-left="onClickLeft" @click-right="submitForm">
       <van-icon name="cross" slot="left" size="22px"/>
       <van-icon name="envelop-o" slot="right" size="22px"/>
     </van-nav-bar>
@@ -25,12 +18,13 @@
         <van-icon name="photograph" size="18px"/>
       </van-uploader>
       <span class="mr-3">
-        <van-switch v-model="articleForm.privacy" size="14px"/>
+        <van-switch v-model="articleForm.privacy" size="14px"/>&nbsp;
         <span class="font-14">{{articleForm.privacy?'私密':'公开'}}</span>
       </span>
       <span @click="showCategory=!showCategory" class="font-14">
         {{articleForm.category}}
-      </span>
+      </span>&emsp;
+      <span class="text-info font-14" @click="goDrafts">草稿</span>
       <span class="float-right font-grey font-14">{{articleForm.content.length}}</span>
     </div>
 
@@ -39,9 +33,9 @@
         <div class="text-center mb-2 " @click="getCategory(item)">{{item}}</div>
       </div>
     </van-popup>
-    <div class="created-blog" @click="goDrafts">
-      <van-icon class="align-middle" name="label-o"/>
-    </div>
+    <!--<div class="created-blog" @click="goDrafts">-->
+      <!--<van-icon class="align-middle" name="label-o"/>-->
+    <!--</div>-->
   </div>
 </template>
 

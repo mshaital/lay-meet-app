@@ -4,7 +4,7 @@
       <div class="back">
         <van-icon name="arrow-left" class="font-white" @click="$router.push('/')"/>
       </div>
-      <img :src="userInfo.head_img" @click="goSetting">
+      <img :src="userInfo.head_img || HeadImg" @click="goSetting">
     </div>
     <div  class="d-flex justify-content-between">
       <div class="account">{{userInfo.nick || userInfo.account}}</div>
@@ -34,6 +34,8 @@
 <script>
   import ArticleList from '~components/ArticleList'
   import coopService from '~modules/coopService'
+  import HeadImg from '~assets/img/head.png'
+
   /* eslint-disable */
   // vue use vueResource for http request.
   export default {
@@ -42,6 +44,7 @@
     },
     data () {
       return {
+          HeadImg,
         userInfo: this.$store.state.userInfo,
         skip: 0,
         dataList: [],

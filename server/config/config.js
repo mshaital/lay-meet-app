@@ -12,6 +12,7 @@ const config = {
     SUCCESS_MSG: 'OK',
     FAIL_MSG: 'ERROR',
     FAIL_MSG_ERROR: '账号或密码错误',
+    FAIL_MSG_EMAIL: '邮箱错误',
     FAIL_MSG_REPEAT: '收藏失败重复收藏',
     FAIL_MSG_MISSING: '缺少必要参数',
   },
