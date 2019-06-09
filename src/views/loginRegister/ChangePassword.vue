@@ -10,11 +10,11 @@
         </div>
         <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
           <span>新密码</span>&emsp;
-          <input class="border-0 bg-light-grey" v-model="ruleForm.userPass" placeholder="请输入密码"/>
+          <input class="border-0 bg-light-grey" v-model="ruleForm.password" placeholder="请输入密码"/>
         </div>
         <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
           <span>重复新密码</span>&emsp;
-          <input class="border-0 bg-light-grey" v-model="ruleForm.userPass" placeholder="请输入密码"/>
+          <input class="border-0 bg-light-grey" v-model="ruleForm.passwordRepeat" placeholder="请输入密码"/>
         </div>
       </div>
       <div class="mt-3 d-flex justify-content-around">
@@ -33,7 +33,7 @@
   import coopService from '~modules/coopService'
   import newValidator from '~utils/validator'
   import NavTitle from '~components/NavTitle'
-  import { Dialog } from 'vant';
+  import { Dialog, Toast } from 'vant';
 
   /* eslint-disable */
   export default {
@@ -42,8 +42,10 @@
       return {
         showError: false,
         ruleForm: {
+          account: this.$route.params.account,
           userName: '',
-          userPass: ''
+          password: '',
+          passwordRepeat: ''
         },
       }
     },
@@ -53,44 +55,24 @@
       }).then(() => { });
     },
     methods: {
-      changePassword() {
-        let data = {
-        }
-        coopService.changePassword(data).then(res => {
-          console.log(res)
-        })
-      },
-      submitForm () {
+      changePassword () {
         let _this = this
         let ruleForm = this.ruleForm
         let checkList = [
-          ['isNoEmpty', '请填写用户名', ruleForm.userName],
-          ['maxLength:15', '用户名不得大于15个字符', ruleForm.userName],
-          ['minLength:5', '用户名不得小于5个字符', ruleForm.userName],
-          ['isNoEmpty', '请填写密码', ruleForm.userPass],
-          ['maxLength:15', '密码不得大于15个字符', ruleForm.userPass],
+          ['isNoEmpty', '请填写密码', ruleForm.password],
+          ['maxLength:15', '密码不得大于15个字符', ruleForm.password],
+          ['isEqual:'+ ruleForm.passwordRepeat, '两次密码输入不同', ruleForm.password],
 //          ['minLength:5', '密码不得小于5个字符', ruleForm.userPass],
         ]
 
         let validators = newValidator.newValidator
         if (validators.addValidator(checkList)) return
-
-        coopService.getAccount(ruleForm).then(res => {
-          if(!res) return
-          let userInfo = res.user
-          let token = res.token
-          console.log(token)
-          _this.$store.commit('SET_USER_INFO', userInfo)
-          _this.$store.commit('SET_TOKEN', token)
-          _this.$router.replace('/')
-          _this.showError = false
-
+        coopService.changePassword(ruleForm).then(res => {
+          if(res !== 'SUCCESS') return
+          Toast.success('密码更改成功');
+          _this.$router.push({ name: 'Login'})
         })
       },
-
-      goRegister(){
-        this.$router.push({ name: 'Register'})
-      }
     }
   }
 </script>

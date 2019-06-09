@@ -120,6 +120,11 @@ let validationStrategies = {
     }
   },
 
+  isEqual: function(errMsg, value1, value2) {
+    if (value1 !== value2) {
+      return this.buildInvalidObj(errMsg, value1)
+    }
+  },
   isAllEmpty: function(errMsg, value1, value2) {
     if ((Util.Util.isEmpty(value1) && Util.Util.isEmpty(value2)) || (Util.Util.isEmpty(value1) && value2 === 'undefined')) {
       return this.buildInvalidObj(errMsg, value1)

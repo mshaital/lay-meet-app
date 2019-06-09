@@ -30,7 +30,6 @@ const qiniu = require('qiniu');
 const nodemailer = require('./utils/nodemailer')
 
 
-
 router.use((req, res, next) => {
   console.log('=========================' + req.url + '=========================')
   next()
@@ -54,10 +53,14 @@ router.post('/api/login/userRegister', (req, res, next) => {
   })
   newAccount.save((err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
-    next({message: config.RES_MSE.SUCCESS_MSG, data: config.RES_DATA_MSG.SUCCESS_MSG, code: config.RES_DATA_CODE.SUCCESS_CODE})
+    next({
+      message: config.RES_MSE.SUCCESS_MSG,
+      data: config.RES_DATA_MSG.SUCCESS_MSG,
+      code: config.RES_DATA_CODE.SUCCESS_CODE
+    })
 
   })
 })
@@ -74,10 +77,10 @@ router.post('/api/login/getAccount', (req, res, next) => {
   let userPass = req.body.userPass
   models.Login.findOne(
     {account: userName, password: userPass},
-    {password: 0, dynamic: 0, private_letter: 0,vemail_pass_code:0},
+    {password: 0, dynamic: 0, private_letter: 0, vemail_pass_code: 0},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
 
@@ -122,7 +125,7 @@ router.post('/api/login/getAuthorListById', [jwtauth], (req, res, next) => {
     {$limit: config.limit},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -156,16 +159,18 @@ router.post('/api/login/getAuthorInfo', [Util.getToken()], (req, res, next) => {
     },
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
     })
 
 
-  if(userId) {
-    models.Login.update({'user_id': userId}, {$addToSet: {'browse_record_user': authorId}}, (err, data) => {})
-    models.Login.update({'user_id': userId}, {$pop:{"browse_record_user": -1}}, (err, data) => {})
+  if (userId) {
+    models.Login.update({'user_id': userId}, {$addToSet: {'browse_record_user': authorId}}, (err, data) => {
+    })
+    models.Login.update({'user_id': userId}, {$pop: {"browse_record_user": -1}}, (err, data) => {
+    })
   }
 })
 
@@ -189,7 +194,7 @@ router.post('/api/user/check/userInfoModify', [jwtauth], (req, res, next) => {
     }
   }, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -214,7 +219,7 @@ router.post('/api/user/userModifyHeadImg', [jwtauth], (req, res, next) => {
   let userId = req.userId
   models.Login.update({'user_id': userId}, {'$set': {head_img: userHeadImg}}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -250,7 +255,7 @@ router.post('/api/blog/check/createArticle', [jwtauth], (req, res, next) => {
   })
   Article.save((err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -276,7 +281,7 @@ router.post('/api/blog/check/getArticle', [jwtauth], (req, res, next) => {
   let articleId = req.body.articleId
   models.Article.findOne({article_id: articleId}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -305,7 +310,7 @@ router.post('/api/blog/check/createArticleDraft', [jwtauth], (req, res, next) =>
   })
   Draft.save((err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -346,7 +351,7 @@ router.post('/api/blog/updataArticleDraft', [jwtauth], (req, res, next) => {
     },
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({
@@ -377,7 +382,7 @@ router.get('/api/blog/check/getArticleDraftList', [Util.getToken()], (req, res, 
     {$limit: config.limit},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -397,7 +402,7 @@ router.post('/api/blog/check/getArticleDraft', [jwtauth], (req, res, next) => {
   let articleId = req.body.articleId
   models.Article.findOne({article_id: articleId}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -415,7 +420,7 @@ router.post('/api/blog/check/deleteArticle', [jwtauth], (req, res, next) => {
   let articleId = req.body.articleId
   models.Article.remove({article_id: articleId}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -451,7 +456,7 @@ router.post('/api/blog/check/updateArticle', [jwtauth], (req, res, next) => {
     },
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({
@@ -509,7 +514,7 @@ router.post('/api/blog/getAllArticle', (req, res, next) => {
     {$limit: config.limit},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -537,7 +542,7 @@ router.post('/api/blog/getArticleDetailsAndAuthorInfo', (req, res, next) => {
     {$match: {'article_id': articleId}},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
 
@@ -569,7 +574,7 @@ router.post('/api/blog/check/createComment', [jwtauth], (req, res, next) => {
 
   models.Article.update({article_id: articleId}, {$push: {'comment': comment}}, {upsert: true}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -597,7 +602,7 @@ router.get('/api/blog/getMyComment', [jwtauth], (req, res, next) => {
     {$skip: skip},
     {$limit: config.limit}, (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -622,7 +627,7 @@ router.get('/api/blog/getCommentByAuthorId', [jwtauth], (req, res, next) => {
     {$skip: skip},
     {$limit: config.limit}, (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -652,7 +657,7 @@ router.post('/api/sys/check/saveComplaintSuggestion', [jwtauth], (req, res, next
   // 保存数据newAccount数据进mongoDB
   problemCon.save((err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -682,7 +687,7 @@ router.post('/api/user/check/createBookmarks', [jwtauth], (req, res, next) => {
 
   models.Login.update({user_id: userId}, {$addToSet: {bookmarks: bookmark}}, {upsert: true}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     if (data.nModified === 0) {
@@ -717,7 +722,7 @@ router.post('/api/user/check/deleteBookmarks', [jwtauth], (req, res, next) => {
 
   models.Login.update({user_id: req.userId}, {$pull: {bookmarks: articleId}}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -760,7 +765,7 @@ router.post('/api/user/check/getReceivedBookmarks', [jwtauth], (req, res, next) 
     {$limit: config.limit},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -779,7 +784,7 @@ router.post('/api/blog/getBookmarkList', (req, res, next) => {
   let bookmars = req.body.list
   models.Article.find({'article_id': {$in: bookmars}}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -803,7 +808,7 @@ router.post('/api/blog/addReadNumber', [Util.getToken()], (req, res, next) => {
 
   models.Article.update({'article_id': articleId}, {'$inc': {'read_num': 1}}, {upsert: true}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -841,7 +846,7 @@ router.get('/api/user/getUserDynamic', [Util.getToken()], (req, res, next) => {
     {$limit: config.limit},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -860,7 +865,7 @@ router.post('/api/blog/likes', [jwtauth], (req, res, next) => {
 
   models.Article.update({'article_id': articleId}, {'$inc': {'likes': 1}}, {upsert: true}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({
@@ -901,7 +906,7 @@ router.post('/api/user/check/userAuthorFollow', [jwtauth], (req, res, next) => {
     let authorIdKey = 'author_focus.' + authorId
     models.Login.update({'user_id': userId}, {$set: {[authorIdKey]: ''}}, (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({
@@ -945,7 +950,7 @@ router.post('/api/user/check/userAuthorUnFollow', [jwtauth], (req, res, next) =>
     let authorIdKey = 'author_focus.' + authorId
     models.Login.update({'user_id': userId}, {$unset: {[authorIdKey]: ''}}, (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({
@@ -976,7 +981,7 @@ router.post('/api/user/check/addaAuthorFocusRemarks', [jwtauth], (req, res, next
 
   models.Login.update({'user_id': userId}, {$pull: {'author_focus': authorId}}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -995,7 +1000,7 @@ router.post('/api/blog/searchArticleByTitle', (req, res, next) => {
   let searchValue = req.body.searchValue
   models.Article.find({content: {$regex: searchValue}, privacy: false}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1015,7 +1020,7 @@ router.post('/api/blog/searchAuthorArticleByTitle', (req, res, next) => {
   let authorId = req.body.authorId
   models.Article.find({content: {$regex: searchValue}, privacy: false, author_id: authorId}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1074,7 +1079,7 @@ router.post('/api/blog/getArticleListByAuthor', (req, res, next) => {
         console.log('error')
         console.log(res)
 
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1128,7 +1133,7 @@ router.post('/api/blog/searchByAuthorAll', [jwtauth], (req, res, next) => {
     {$limit: config.limit},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1179,7 +1184,7 @@ router.post('/api/blog/searchByArticleId', (req, res, next) => {
     {$limit: config.limit},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1194,7 +1199,7 @@ router.get('/api/admin/check/userProblem', (req, res, next) => {
   // console.log('userProblem')
   models.Problem.find({}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1223,7 +1228,7 @@ router.post('/api/user/savePrivateLetter', [jwtauth], (req, res, next) => {
 
   models.Login.update({'user_id': userId}, {$push: {'private_letter': privateLetter}}, (err, data) => {
     if (err) {
-      Util.failHand(res,err)
+      Util.failHand(res, err)
       return
     }
     next({message: config.RES_MSE.SUCCESS_MSG, data: privateLetter, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1252,7 +1257,7 @@ router.post('/api/user/getPrivateLetter', [jwtauth], (req, res, next) => {
     {$limit: 10},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1282,7 +1287,7 @@ router.post('/api/user/getPrivateLetterList', [jwtauth], (req, res, next) => {
     {$limit: 10},
     (err, data) => {
       if (err) {
-        Util.failHand(res,err)
+        Util.failHand(res, err)
         return
       }
       next({message: config.RES_MSE.SUCCESS_MSG, data: data, code: config.RES_DATA_CODE.SUCCESS_CODE})
@@ -1303,15 +1308,17 @@ router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
     scope: keyCode.Bucket,
   };
   let putPolicy = new qiniu.rs.PutPolicy(options);
-  let uploadToken=putPolicy.uploadToken(mac);
+  let uploadToken = putPolicy.uploadToken(mac);
   next({message: config.RES_MSE.SUCCESS_MSG, data: uploadToken, code: config.RES_DATA_CODE.SUCCESS_CODE})
 })
 
 /**
- * @description 更改密码
- * @return {String} uploadToken
+ * @description 验证邮箱发送验证码
+ * @param {String} account 账号
+ * @param {String} email 邮件地址
+ * @return {String} SUCCESS
  */
-router.post('/api/login/changePassword', (req, res, next) => {
+router.post('/api/login/checkEmail', (req, res, next) => {
   console.log('changePassword')
 
   let account = req.body.account
@@ -1323,14 +1330,13 @@ router.post('/api/login/changePassword', (req, res, next) => {
       if (err) {
         reject(err)
       } else {
-        if (data.email === email){
-          console.log(444444)
+        if (data.email === email) {
           resolve(data.email)
-        }else {
+        } else {
           next({
             message: config.RES_MSE.FAIL_MSG_EMAIL,
-            data: config.RES_DATA_MSG.FAIL_MSG_EMAIL,
-            code: config.RES_DATA_CODE.SUCCESS_CODE
+            data: config.RES_DATA_MSG.FAIL_MSG,
+            code: config.RES_DATA_CODE.FAIL_CODE
           })
 
         }
@@ -1339,7 +1345,6 @@ router.post('/api/login/changePassword', (req, res, next) => {
   })
 
   promise.then(email => {
-
     let opt = {
       from: keyCode.emailUser, // list of receivers
       to: email, // sender address
@@ -1358,12 +1363,11 @@ router.post('/api/login/changePassword', (req, res, next) => {
     </div>
 `
     }
-    console.log(5555)
 
     nodemailer(opt, info => {
       models.Login.update({account: account}, {$set: {email_pass_code: email_pass_code}}, (err, data) => {
         if (err) {
-          Util.failHand(res,err)
+          Util.failHand(res, err)
           return
         }
         next({
@@ -1378,6 +1382,77 @@ router.post('/api/login/changePassword', (req, res, next) => {
   })
 })
 
+
+/**
+ * @description 更改密码
+ * @param {String} code 验证码
+ * @param {String} pass 新密码
+ * @return {String} SUCCESS
+ */
+router.post('/api/login/changePassword', (req, res, next) => {
+
+  let account = req.body.account
+  let code = req.body.code
+  let password = req.body.password
+  console.log(password)
+
+  let promise = new Promise((resolve, reject) => {
+    models.Login.findOne({'account': account}, {email_pass_code: 1, email: 1}, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        if (data.email_pass_code === code) {
+          console.log(444444)
+          resolve(data)
+        } else {
+          next({
+            message: config.RES_MSE.FAIL_MSG_CODE,
+            data: config.RES_DATA_MSG.FAIL_MSG,
+            code: config.RES_DATA_CODE.FAIL_CODE
+          })
+
+        }
+      }
+    })
+  })
+
+  promise.then(data => {
+
+    let opt = {
+      from: keyCode.emailUser, // list of receivers
+      to: data.email, // sender address
+      subject: "通知：您的密码已重置", // Subject line
+      text: "Hello world?", // plain text body
+      html: `
+    <div style="padding: 30px;margin: 10px;background-color: #fafafa;border:1px solid #e1e1e1">
+      <h2 style="color: #17a2b8;text-align: center">Find</h2>
+      <p>尊敬的用户：</p>
+      <p>你的find账户密码已成功通过验证邮件方式更改请牢记新密码。</p>
+      <p>谢谢！</p>
+      <p>Find 团队</p>
+      <p>需要帮助？</p>
+      <p>如在帐户方面需要帮助，请联系客户支持。</p>
+    </div>
+`
+    }
+    console.log(5555)
+    console.log(data)
+
+    nodemailer(opt, info => {
+      models.Login.update({account: account}, {$set: {password: password}}, (err, data) => {
+        if (err) {
+          Util.failHand(res, err)
+          return
+        }
+        next({
+          message: config.RES_MSE.SUCCESS_MSG,
+          data: config.RES_DATA_MSG.SUCCESS_MSG,
+          code: config.RES_DATA_CODE.SUCCESS_CODE
+        })
+      })
+    }).catch(console.error)
+  }).catch((e) => {})
+})
 
 router.use((info, req, res, next) => {
   res.status(200).json({message: info.message, content: info.data, statusCode: info.code})

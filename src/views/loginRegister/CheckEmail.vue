@@ -6,21 +6,17 @@
       <div class="mt-2">
         <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
           <span>账号</span>&emsp;
-          <input class="border-0 bg-light-grey" v-model="ruleForm.account" placeholder="请输入用户名"/>
+          <input class="border-0 bg-light-grey" v-model="ruleForm.account" placeholder="请输入账号"/>
         </div>
         <div class="mb-4 pt-2 pb-2 rounded-pill text-center bg-light-grey font-grey font-14">
           <span>邮箱</span>&emsp;
-          <input class="border-0 bg-light-grey" v-model="ruleForm.email" placeholder="请输入密码"/>
+          <input class="border-0 bg-light-grey" v-model="ruleForm.email" placeholder="请输入邮箱"/>
         </div>
       </div>
       <div class="mt-3 d-flex justify-content-around">
-        <van-button type="" @click="changePassword" round class=" btn-info border-0 w-100">确定</van-button>
+        <van-button type="" @click="checkEmail" round class=" btn-info border-0 w-100">确定</van-button>
       </div>
     </div>
-
-
-
-
 
   </div>
 </template>
@@ -48,7 +44,7 @@
       this.$store.commit('SET_TOKEN', '')
     },
     methods: {
-      changePassword() {
+      checkEmail() {
         let _this = this
         let ruleForm = this.ruleForm
         let checkList = [
@@ -62,9 +58,9 @@
         let validators = newValidator.newValidator
         if (validators.addValidator(checkList)) return
         let data = ruleForm
-        coopService.changePassword(data).then(res => {
+        coopService.checkEmail(data).then(res => {
           if (res !== 'SUCCESS') return
-          _this.$router.push({ name: 'ChangePassword'})
+          _this.$router.push({ name: 'ChangePassword', params: {account: ruleForm.account}})
 
         })
       },

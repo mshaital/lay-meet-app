@@ -43,6 +43,7 @@ const saveComplaintSuggestion = '/api/sys/check/saveComplaintSuggestion' // 投�
 const getUserDynamic = '/api/user/getUserDynamic' // 查询动态
 
 
+const checkEmail = '/api/login/checkEmail' // 更改密码
 const changePassword = '/api/login/changePassword' // 更改密码
 
 
@@ -100,5 +101,6 @@ export default {
 
   saveComplaintSuggestion,
 
+  checkEmail,
   changePassword,
 }

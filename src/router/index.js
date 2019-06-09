@@ -130,7 +130,7 @@ export default new Router({
       component: CheckEmail
     },
     {
-      path: '/ChangePassword',
+      path: '/ChangePassword/:account',
       name: 'ChangePassword',
       component: ChangePassword
     },
