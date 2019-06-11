@@ -4,7 +4,6 @@
 /* eslint-disable */
 
 const config = {
-  jwtTokenSecret: 'YOUR_SECRET_STRING',
 
   limit:20,
 

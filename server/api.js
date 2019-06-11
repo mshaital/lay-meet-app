@@ -21,10 +21,11 @@ const jwtauth = require('./utils/jwtauth')
 const xss = require('xss')
 const Util = require('./utils/Util')
 const uuid = require('uuid')
-
-app.set('jwtTokenSecret', config.jwtTokenSecret)
+const crypto = require('crypto');
 
 const keyCode = require('./config/keycode')
+
+app.set('jwtTokenSecret', keyCode.jwtTokenSecret)
 const fs = require('fs');
 const qiniu = require('qiniu');
 const nodemailer = require('./utils/nodemailer')
@@ -41,10 +42,21 @@ router.use((req, res, next) => {
  */
 router.post('/api/login/userRegister', (req, res, next) => {
   let user_id = uuid.v1();
+
+  let salt = uuid.v1()
+  let password = req.body.userPass
+  // 密码“加盐”
+  let saltPassword = password + salt;
+  // 密码“加盐”的md5
+  let md5 = crypto.createHash("md5");
+  let resultPassword = md5.update(saltPassword).digest("hex");
+  resultPassword = resultPassword + '~' + salt
+  console.log(resultPassword)
+
   let newAccount = new models.Login({
     user_id: user_id,
     account: req.body.userName,
-    password: req.body.userPass,
+    password: resultPassword,
     email: req.body.email,
     cell_phone_num: req.body.cellPhoneNum,
     sex: req.body.sex,
@@ -75,27 +87,46 @@ router.post('/api/login/getAccount', (req, res, next) => {
   // console.log('getAccount')
   let userName = req.body.userName
   let userPass = req.body.userPass
+
   models.Login.findOne(
-    {account: userName, password: userPass},
-    {password: 0, dynamic: 0, private_letter: 0, vemail_pass_code: 0},
+    {account: userName},
+    {dynamic: 0, private_letter: 0, email_pass_code: 0},
     (err, data) => {
       if (err) {
         Util.failHand(res, err)
         return
       }
-
       if (data === '' || data === undefined || data === null) {
-        next(RES_MSE.FAIL_MSG_ERROR, config.RES_DATA_MSG.FAIL_MSG, config.RES_DATA_CODE.FAIL_CODE)
-      } else {
-        data.isLogin = true
+        next({
+          message: config.RES_MSE.FAIL_MSG_ERROR,
+          data: config.RES_DATA_MSG.FAIL_MSG,
+          code: config.RES_DATA_CODE.FAIL_CODE
+        })
+        return
+      }
+      let salt = data.password.split('~')
+      let saltPassword = userPass + salt[1];
+      let md5 = crypto.createHash("md5");
+      let resultPassword = md5.update(saltPassword).digest("hex");
+      resultPassword = resultPassword + '~' + salt[1]
+
+      if (resultPassword === data.password) {
         let expires = moment().add(7, 'days').valueOf()
         let token = jwt.encode({iss: data.user_id, exp: expires}, app.get('jwtTokenSecret'))
-        let datas = {
+        let content = {
           token: token,
-          user: data.toJSON()
+          user: data
         }
-        next({message: config.RES_MSE.SUCCESS_MSG, data: datas, code: config.RES_DATA_CODE.SUCCESS_CODE})
+        content.user.password = ''
+        delete content.user.password
 
+        next({message: config.RES_MSE.SUCCESS_MSG, data: content, code: config.RES_DATA_CODE.SUCCESS_CODE})
+      } else {
+        next({
+          message: config.RES_MSE.FAIL_MSG_ERROR,
+          data: config.RES_DATA_MSG.FAIL_MSG,
+          code: config.RES_DATA_CODE.FAIL_CODE
+        })
       }
     })
 })
@@ -1451,7 +1482,8 @@ router.post('/api/login/changePassword', (req, res, next) => {
         })
       })
     }).catch(console.error)
-  }).catch((e) => {})
+  }).catch((e) => {
+  })
 })
 
 router.use((info, req, res, next) => {
