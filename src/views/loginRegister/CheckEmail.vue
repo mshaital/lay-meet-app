@@ -51,8 +51,8 @@
           ['isNoEmpty', '请填写用户名', ruleForm.account],
           ['maxLength:15', '用户名不得大于15个字符', ruleForm.account],
           ['minLength:5', '用户名不得小于5个字符', ruleForm.account],
-          ['isNoEmpty', '请填写邮件地址', ruleForm.email],
-          ['isEmail', '邮件地址不正确', ruleForm.email],
+//          ['isNoEmpty', '请填写邮件地址', ruleForm.email],
+//          ['isEmail', '邮件地址不正确', ruleForm.email],
         ]
 
         let validators = newValidator.newValidator

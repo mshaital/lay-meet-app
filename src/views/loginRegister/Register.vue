@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="button-group d-flex justify-content-around">
-      <van-button type="info" @click="submit" round :block="true" class="">注册</van-button>
+      <van-button type="" @click="submit" round :block="true" class="btn-info border-0">注册</van-button>
     </div>
     <van-popup v-model="showPicker" position="bottom">
       <van-datetime-picker
@@ -89,10 +89,10 @@
           ['isNoEmpty', '请填写密码', submitForm.userPass],
           ['maxLength:15', '密码不得大于15个字符', submitForm.userPass],
           ['minLength:5', '密码不得小于5个字符', submitForm.userPass],
-          ['isNoEmpty', '请填写邮件地址', submitForm.email],
-          ['isEmail', '邮件地址不正确', submitForm.email],
-          ['isNoEmpty', '请填写手机号', submitForm.cellPhoneNum],
-          ['isPhoneNum', '手机号不正确', submitForm.cellPhoneNum]
+//          ['isNoEmpty', '请填写邮件地址', submitForm.email],
+//          ['isEmail', '邮件地址不正确', submitForm.email],
+//          ['isNoEmpty', '请填写手机号', submitForm.cellPhoneNum],
+//          ['isPhoneNum', '手机号不正确', submitForm.cellPhoneNum]
         ]
 
         let validators = newValidator.newValidator

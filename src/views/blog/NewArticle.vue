@@ -5,16 +5,20 @@
       <van-icon name="envelop-o" slot="right" size="22px"/>
     </van-nav-bar>
 
-    <div class="input-area">
+    <div class="input-area ">
       <area-input v-model="articleForm.content" min-height="300px" tips="我想说"></area-input>
-      <div class="img-list">
-        <div v-for="(item, index) in imgList" class="w-30">
-          <img class="img-fluid" :src="item">
+    </div>
+
+    <div  class="d-flex flex-wrap position-fixed w-100 bottom-40">
+      <div v-for="(item, index) in articleForm.imgList" :key="index" class="p-1 w-33" @click="imagePreview(index)">
+        <div class="pt-100 w-100 position-relative">
+          <van-image class="position-absolute top-0" width="100%" height="100%" fit="cover" :src="examplePicture"/>
         </div>
       </div>
     </div>
+
     <div class="footer">
-      <van-uploader :after-read="onRead" class="mr-3">
+      <van-uploader :after-read="onRead" :multiple="true" class="mr-3">
         <van-icon name="photograph" size="18px"/>
       </van-uploader>
       <span class="mr-3">
@@ -41,10 +45,14 @@
 
 <script>
   /* eslint-disable */
-  import {Toast, Dialog} from 'vant';
+  import {Toast, Dialog, ImagePreview} from 'vant';
   import xss from 'xss'
   import AreaInput from '~components/AreaInput'
   import coopService from '~modules/coopService'
+  import examplePicture from '~assets/img/banner-5.png'
+  import * as qiniu from 'qiniu-js'
+  import Util from '~utils/Util'
+  import Config from '~config/config'
 
   export default {
     name: 'editor',
@@ -53,9 +61,9 @@
     },
     data () {
       return {
+        examplePicture,
         isModify: true,
         index: '',
-        imgList: [],
         showCategory: false,
         columnsCategory: ['技术', '随想', '杂谈', '感悟'],
         tipText: '需要保存至草稿吗？',
@@ -67,7 +75,8 @@
           articleDate: new Date(),
           privacy: false,
           content: '',
-          account: ''
+          account: '',
+          imgList: []
         }
       }
     },
@@ -98,12 +107,25 @@
       }
     },
     methods: {
+      imagePreview(index) {
+        ImagePreview({
+          images: this.articleForm.imgList,
+          startPosition: index
+        });
+      },
+
       onClickLeft() {
         this.$router.go(-1)
       },
       onRead(file) {
-        console.log(file)
-        this.imgList.push(file.content)
+        let _this = this
+        for(let i = 0; i < file.length; i++) {
+          Util.Util.asyncUploadImg(file[i], 70, 70, .5, res => {
+            let imgAddress = Config.resourceConfig.imgBaseUrl + res.hash
+            _this.articleForm.imgList.push(imgAddress)
+          })
+        }
+
       },
       getCategory(val) {
         this.articleForm.category = val
@@ -193,6 +215,7 @@
 
   .input-area {
     padding: 10px;
+    overflow-y: scroll;
   }
   .img-list{
     display: flex;

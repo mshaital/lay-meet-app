@@ -15,6 +15,7 @@ const config = {
     FAIL_MSG_EMAIL: '邮箱错误',
     FAIL_MSG_REPEAT: '收藏失败重复收藏',
     FAIL_MSG_MISSING: '缺少必要参数',
+    FAIL_MSG_OVERTIME: '验证码超时',
   },
 
   RES_CODE: {
@@ -28,12 +29,13 @@ const config = {
   },
 
   RES_DATA_CODE: {
-    SUCCESS_CODE: 100, // 100 成功
-    FAIL_CODE: 104, // 104 失败
-    NOT_LOGIN_CODE: 103, // 103 未登录
-    REPEAT_ERROR_CODE: 105, // 105 重复
-    ERROR_CODE: 106, // 106 错误
-    MISSING_ERROR_CODE: 107, // 106 参数缺少
+    SUCCESS_CODE: 100, //  成功
+    FAIL_CODE: 104, //  失败
+    NOT_LOGIN_CODE: 103, //  未登录
+    REPEAT_ERROR_CODE: 105, //  重复
+    ERROR_CODE: 106, //  错误
+    MISSING_ERROR_CODE: 107, //  参数缺少
+    OVERTIME_ERROR_CODE: 108, //  超时
   },
 
 }

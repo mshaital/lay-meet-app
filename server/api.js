@@ -44,14 +44,16 @@ router.post('/api/login/userRegister', (req, res, next) => {
   let user_id = uuid.v1();
 
   let salt = uuid.v1()
+  let saltHash = Util.aesEncrypt(salt, keyCode.AESKey)
   let password = req.body.userPass
   // 密码“加盐”
-  let saltPassword = password + salt;
+  let passwordPart1 = password.substring(0, keyCode.passwordDnd)
+  let passwordPart2 = password.substring(keyCode.passwordDnd)
+  let saltPassword = passwordPart1 + salt + passwordPart2;
   // 密码“加盐”的md5
-  let md5 = crypto.createHash("md5");
-  let resultPassword = md5.update(saltPassword).digest("hex");
-  resultPassword = resultPassword + '~' + salt
-  console.log(resultPassword)
+
+  let resultPassword = Util.md5(saltPassword);
+  resultPassword = resultPassword + saltHash
 
   let newAccount = new models.Login({
     user_id: user_id,
@@ -87,7 +89,7 @@ router.post('/api/login/getAccount', (req, res, next) => {
   // console.log('getAccount')
   let userName = req.body.userName
   let userPass = req.body.userPass
-
+ // 5990aa005201a78fafe55c7edba1c5e9-d12e4f09a431ba6351042d3c389f42ac1d343c23b2be5c8c15c34c3dc51609bce417885427f103d32e0aa9744d91a2b5
   models.Login.findOne(
     {account: userName},
     {dynamic: 0, private_letter: 0, email_pass_code: 0},
@@ -104,11 +106,15 @@ router.post('/api/login/getAccount', (req, res, next) => {
         })
         return
       }
-      let salt = data.password.split('~')
-      let saltPassword = userPass + salt[1];
-      let md5 = crypto.createHash("md5");
-      let resultPassword = md5.update(saltPassword).digest("hex");
-      resultPassword = resultPassword + '~' + salt[1]
+
+      let saltHash = data.password.substring(32) // 加密的盐
+      let salt = Util.aesDecrypt(saltHash, keyCode.AESKey) // 解密的盐
+
+      let passwordPart1 = userPass.substring(0, keyCode.passwordDnd)
+      let passwordPart2 = userPass.substring(keyCode.passwordDnd)
+
+      let saltPassword = passwordPart1 + salt + passwordPart2;
+      let resultPassword = Util.md5(saltPassword) + saltHash;
 
       if (resultPassword === data.password) {
         let expires = moment().add(7, 'days').valueOf()
@@ -247,12 +253,32 @@ router.post('/api/user/check/userInfoModify', [jwtauth], (req, res, next) => {
 router.post('/api/user/userModifyHeadImg', [jwtauth], (req, res, next) => {
   // console.log('userModifyHead')
   let userHeadImg = req.body.userHeadImg
+  let oldUserHeadImg = req.body.oldUserHeadImg
   let userId = req.userId
+
+
+
   models.Login.update({'user_id': userId}, {'$set': {head_img: userHeadImg}}, (err, data) => {
     if (err) {
       Util.failHand(res, err)
       return
     }
+    let mac = new qiniu.auth.digest.Mac(keyCode.AccessKey, keyCode.SecretKey);
+    let qnConfig = new qiniu.conf.Config();
+    //config.useHttpsDomain = true;
+    qnConfig.zone = qiniu.zone.Zone_z0;
+    let bucketManager = new qiniu.rs.BucketManager(mac, qnConfig);
+    let bucket = keyCode.Bucket;
+    let key = oldUserHeadImg;
+    bucketManager.delete(bucket, key, function(err, respBody, respInfo) {
+      if (err) {
+        console.log(err);
+        //throw err;
+      } else {
+        console.log(respInfo.statusCode);
+        console.log(respBody);
+      }
+    });
     next({
       message: config.RES_MSE.SUCCESS_MSG,
       data: config.RES_DATA_MSG.SUCCESS_MSG,
@@ -1350,11 +1376,14 @@ router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
  * @return {String} SUCCESS
  */
 router.post('/api/login/checkEmail', (req, res, next) => {
-  console.log('changePassword')
+  console.log('checkEmail')
 
   let account = req.body.account
   let email = req.body.email
-  let email_pass_code = uuid.v1();
+
+  let time = (new Date()).valueOf().toString()
+  let timeHash = Util.aesEncrypt(time, keyCode.AESKey)
+  let email_pass_code = Util.md5(uuid.v1())+ timeHash;
 
   let promise = new Promise((resolve, reject) => {
     models.Login.findOne({'account': account}, {email: 1}, (err, data) => {
@@ -1362,14 +1391,13 @@ router.post('/api/login/checkEmail', (req, res, next) => {
         reject(err)
       } else {
         if (data.email === email) {
-          resolve(data.email)
+          resolve(email)
         } else {
           next({
             message: config.RES_MSE.FAIL_MSG_EMAIL,
             data: config.RES_DATA_MSG.FAIL_MSG,
             code: config.RES_DATA_CODE.FAIL_CODE
           })
-
         }
       }
     })
@@ -1385,7 +1413,7 @@ router.post('/api/login/checkEmail', (req, res, next) => {
     <div style="padding: 30px;margin: 10px;background-color: #fafafa;border:1px solid #e1e1e1">
       <h2 style="color: #17a2b8;text-align: center">Find</h2>
       <p>尊敬的用户：</p>
-      <p>下列字符为用于更改密码的验证码请勿告诉他人。</p>
+      <p>下列字符为用于更改密码的验证码请勿告诉他人。（有效期5分钟）</p>
       <p style="color: #17a2b8;font-size:20px">${email_pass_code}</p>
       <p>谢谢！</p>
       <p>Find 团队</p>
@@ -1396,6 +1424,9 @@ router.post('/api/login/checkEmail', (req, res, next) => {
     }
 
     nodemailer(opt, info => {
+
+      email_pass_code = Util.md5(email_pass_code)
+
       models.Login.update({account: account}, {$set: {email_pass_code: email_pass_code}}, (err, data) => {
         if (err) {
           Util.failHand(res, err)
@@ -1408,8 +1439,7 @@ router.post('/api/login/checkEmail', (req, res, next) => {
         })
       })
     }).catch(console.error)
-  }).catch((e) => {
-    // console.log('关注作者失败')
+  }).catch( e => {
   })
 })
 
@@ -1425,15 +1455,36 @@ router.post('/api/login/changePassword', (req, res, next) => {
   let account = req.body.account
   let code = req.body.code
   let password = req.body.password
-  console.log(password)
+
+  if (code.length < 33){
+    next({
+      message: config.RES_MSE.FAIL_MSG_CODE,
+      data: config.RES_DATA_MSG.FAIL_MSG,
+      code: config.RES_DATA_CODE.FAIL_CODE
+    })
+    return
+  }
 
   let promise = new Promise((resolve, reject) => {
     models.Login.findOne({'account': account}, {email_pass_code: 1, email: 1}, (err, data) => {
+      let codeHash = Util.md5(code)
       if (err) {
         reject(err)
       } else {
-        if (data.email_pass_code === code) {
-          console.log(444444)
+        if (data.email_pass_code === codeHash) {
+          let time =  Util.aesDecrypt(code.substring(32), keyCode.AESKey)
+
+          let codeTime = parseInt(time)
+          let now = (new Date()).valueOf()
+
+          if(now - codeTime > 5*60*1000){
+            next({
+              message: config.RES_MSE.FAIL_MSG_OVERTIME,
+              data: config.RES_DATA_MSG.FAIL_MSG,
+              code: config.RES_DATA_CODE.OVERTIME_ERROR_CODE
+            })
+            return
+          }
           resolve(data)
         } else {
           next({
@@ -1466,8 +1517,6 @@ router.post('/api/login/changePassword', (req, res, next) => {
     </div>
 `
     }
-    console.log(5555)
-    console.log(data)
 
     nodemailer(opt, info => {
       models.Login.update({account: account}, {$set: {password: password}}, (err, data) => {

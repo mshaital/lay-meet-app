@@ -6,9 +6,9 @@
 const express = require('express')
 const app = express()
 const jwt = require('jwt-simple')
-const config = require('./../config/config')
+const keyCode = require('../config/keycode')
 
-app.set('jwtTokenSecret', config.jwtTokenSecret)
+app.set('jwtTokenSecret', keyCode.jwtTokenSecret)
 
 module.exports = function (req, res, next) {
   let token = (req.headers.token)

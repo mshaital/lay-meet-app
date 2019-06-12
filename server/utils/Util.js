@@ -8,6 +8,7 @@ const express = require('express')
 const app = express()
 const jwt = require('jwt-simple')
 const config = require('./../config/config')
+const crypto = require('crypto');
 
 app.set('jwtTokenSecret', config.jwtTokenSecret)
 // 存储动态
@@ -57,7 +58,11 @@ let Util = {
   },
   failHand (res, err) {
     console.log(err)
-    res.status(config.RES_CODE.SUCCESS_CODE).json({message: config.RES_MSE.SUCCESS_MSG, content: config.RES_DATA_MSG.FAIL_MSG, statusCode: config.RES_DATA_CODE.FAIL_CODE})
+    res.status(config.RES_CODE.SUCCESS_CODE).json({
+      message: config.RES_MSE.SUCCESS_MSG,
+      content: config.RES_DATA_MSG.FAIL_MSG,
+      statusCode: config.RES_DATA_CODE.FAIL_CODE
+    })
   },
   missingParamRes (res, ...param) {
     return () => {
@@ -70,7 +75,29 @@ let Util = {
         }
       }
     }
+  },
+
+  // md5 加密
+  md5(data) {
+    let md5 = crypto.createHash("md5");
+    return md5.update(data).digest("hex");
+  },
+
+  // AES 加密
+  aesEncrypt(data, key) {
+    const cipher = crypto.createCipher('aes192', key);
+    let crypted = cipher.update(data, 'utf8', 'hex');
+    crypted += cipher.final('hex');
+    return crypted;
+  },
+  // AES 解密
+  aesDecrypt(encrypted, key) {
+    const decipher = crypto.createDecipher('aes192', key);
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
   }
+
 }
 
 module.exports = Util
