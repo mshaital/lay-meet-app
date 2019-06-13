@@ -39,6 +39,11 @@
           </div>
           <van-switch class="float-right" @change="changeTheme" v-model="checked" size="14px" active-color="#17a2b8"/>
         </div>
+
+        <div class="p-3 border-bottom" @click="goView(7)">
+          <van-icon name="underway-o" size="20px" class="mr-4 align-middle"/>
+          <span class="align-middle">账户安全</span>
+        </div>
         <div class="p-3" @click="goView(6)">
           <van-icon name="service" size="20px" class="mr-4 align-middle"/>
           <span class="align-middle">投诉建议</span>
@@ -103,6 +108,10 @@
           },
           {
             state: 'Problem',
+            params: '',
+          },
+          {
+            state: 'SafeAccount',
             params: '',
           },
         ]

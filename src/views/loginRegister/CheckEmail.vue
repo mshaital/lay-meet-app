@@ -40,8 +40,7 @@
       }
     },
     created(){
-      this.$store.commit('SET_USER_INFO', {})
-      this.$store.commit('SET_TOKEN', '')
+
     },
     methods: {
       checkEmail() {

@@ -13,6 +13,7 @@ const config = {
     FAIL_MSG_ERROR: '账号或密码错误',
     FAIL_MSG_CODE: '验证码错误',
     FAIL_MSG_EMAIL: '邮箱错误',
+    FAIL_MSG_EMAIL_REPEAT: '邮箱已被绑定',
     FAIL_MSG_REPEAT: '收藏失败重复收藏',
     FAIL_MSG_MISSING: '缺少必要参数',
     FAIL_MSG_OVERTIME: '验证码超时',

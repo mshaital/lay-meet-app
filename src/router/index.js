@@ -14,6 +14,7 @@ import Dynamic from '@/views/user/Dynamic'
 import Message from '@/views/message/Message'
 import BaseSetting from '@/views/user/BaseSetting'
 import BrowseRecord from '@/views/user/BrowseRecord'
+import SafeAccount from '@/views/user/SafeAccount'
 import NewArticle from '@/views/blog/NewArticle'
 import ArticleDiscover from '@/views/blog/ArticleDiscover'
 import ArticleDetails from '@/views/blog/ArticleDetails'
@@ -123,6 +124,11 @@ export default new Router({
       path: '/BrowseRecord',
       name: 'BrowseRecord',
       component: BrowseRecord
+    },
+    {
+      path: '/SafeAccount',
+      name: 'SafeAccount',
+      component: SafeAccount
     },
     {
       path: '/CheckEmail',

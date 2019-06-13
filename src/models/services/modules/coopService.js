@@ -142,6 +142,9 @@ export default {
   saveComplaintSuggestion (params) {
     return AxiosManager.post(Apis.saveComplaintSuggestion, params)
   },
+  bindEmail (params) {
+    return AxiosManager.post(Apis.bindEmail, params)
+  },
   checkEmail (params) {
     return AxiosManager.post(Apis.checkEmail, params)
   },

@@ -15,11 +15,16 @@
       <div class="form-input">
         <span>邮箱</span>&emsp;
         <input v-model="submitForm.email" placeholder="请输入邮箱"/>
+        <button type="" @click="sendCode" round class="btn-info border-0 rounded">发送验证码</button>
       </div>
       <div class="form-input">
-        <span>手机</span>&emsp;
-        <input v-model="submitForm.cellPhoneNum" placeholder="请输入手机号"/>
+        <span>验证码</span>&emsp;
+        <input v-model="submitForm.code" placeholder="请输入邮箱"/>
       </div>
+      <!--<div class="form-input">-->
+        <!--<span>手机</span>&emsp;-->
+        <!--<input v-model="submitForm.cellPhoneNum" placeholder="请输入手机号"/>-->
+      <!--</div>-->
       <!--<div class="form-input" @click="showPicker=!showPicker">-->
         <!--<span class="">生日</span>&emsp;-->
         <!--<input v-model="birthday" placeholder="请输入密码" disabled/>-->
@@ -41,7 +46,6 @@
         :min-date="minDate"
       />
     </van-popup>
-
   </div>
 
 </template>
@@ -64,6 +68,7 @@
           userName: '',
           userPass: '',
           email: '',
+          code: '',
           cellPhoneNum: '',
           reUserPass: '',
           birthday: new Date(),
@@ -77,6 +82,15 @@
       }
     },
     methods: {
+      sendCode() {
+        let data = {
+          email: this.submitForm.email
+        }
+        coopService.bindEmail(data).then(res => {
+          if (res !== 'SUCCESS') return
+          Toast('发送成功')
+        })
+      },
       submit () {
         // 获取已有账号密码
         let _this = this
@@ -89,8 +103,8 @@
           ['isNoEmpty', '请填写密码', submitForm.userPass],
           ['maxLength:15', '密码不得大于15个字符', submitForm.userPass],
           ['minLength:5', '密码不得小于5个字符', submitForm.userPass],
-//          ['isNoEmpty', '请填写邮件地址', submitForm.email],
-//          ['isEmail', '邮件地址不正确', submitForm.email],
+          ['isNoEmpty', '请填写邮件地址', submitForm.email],
+          ['isEmail', '邮件地址不正确', submitForm.email],
 //          ['isNoEmpty', '请填写手机号', submitForm.cellPhoneNum],
 //          ['isPhoneNum', '手机号不正确', submitForm.cellPhoneNum]
         ]
@@ -120,8 +134,10 @@
   .form-group {
     padding: 20px;
     .form-input {
+      display: flex;
+
       margin-bottom: 20px;
-      padding: 10px 0;
+      padding: 10px 10px 10px 20px;
       border-radius: 30px;
       text-align: center;
       background-color: white;

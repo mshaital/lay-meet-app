@@ -12,6 +12,7 @@
 
 const models = require('./db')
 const express = require('express')
+const session = require('express-session');
 const router = express.Router()
 const jwt = require('jwt-simple')
 const config = require('./config/config')
@@ -24,6 +25,16 @@ const uuid = require('uuid')
 const crypto = require('crypto');
 
 const keyCode = require('./config/keycode')
+
+
+router.use(session({
+  secret: 'secret', // 对session id 相关的cookie 进行签名
+  resave: true,
+  saveUninitialized: false, // 是否保存未初始化的会话
+  cookie: {
+    maxAge: 1000 * 60 * 5, // 设置 session 的有效时间，单位毫秒
+  },
+}));
 
 app.set('jwtTokenSecret', keyCode.jwtTokenSecret)
 const fs = require('fs');
@@ -41,6 +52,17 @@ router.use((req, res, next) => {
  * @return {String} SUCCESS/FAIL
  */
 router.post('/api/login/userRegister', (req, res, next) => {
+
+  let emailCode = parseInt(req.body.code)
+  if (req.session.emailCode !== emailCode) {
+    next({
+      message: config.RES_MSE.FAIL_MSG_CODE,
+      data: config.RES_DATA_MSG.FAIL_MSG,
+      code: config.RES_DATA_CODE.FAIL_CODE
+    })
+    return
+  }
+
   let user_id = uuid.v1();
 
   let salt = uuid.v1()
@@ -65,6 +87,7 @@ router.post('/api/login/userRegister', (req, res, next) => {
     birthday: req.body.birthday,
     register_date: (new Date()).valueOf(),
   })
+
   newAccount.save((err, data) => {
     if (err) {
       Util.failHand(res, err)
@@ -89,7 +112,7 @@ router.post('/api/login/getAccount', (req, res, next) => {
   // console.log('getAccount')
   let userName = req.body.userName
   let userPass = req.body.userPass
- // 5990aa005201a78fafe55c7edba1c5e9-d12e4f09a431ba6351042d3c389f42ac1d343c23b2be5c8c15c34c3dc51609bce417885427f103d32e0aa9744d91a2b5
+  // 5990aa005201a78fafe55c7edba1c5e9-d12e4f09a431ba6351042d3c389f42ac1d343c23b2be5c8c15c34c3dc51609bce417885427f103d32e0aa9744d91a2b5
   models.Login.findOne(
     {account: userName},
     {dynamic: 0, private_letter: 0, email_pass_code: 0},
@@ -257,7 +280,6 @@ router.post('/api/user/userModifyHeadImg', [jwtauth], (req, res, next) => {
   let userId = req.userId
 
 
-
   models.Login.update({'user_id': userId}, {'$set': {head_img: userHeadImg}}, (err, data) => {
     if (err) {
       Util.failHand(res, err)
@@ -270,7 +292,7 @@ router.post('/api/user/userModifyHeadImg', [jwtauth], (req, res, next) => {
     let bucketManager = new qiniu.rs.BucketManager(mac, qnConfig);
     let bucket = keyCode.Bucket;
     let key = oldUserHeadImg;
-    bucketManager.delete(bucket, key, function(err, respBody, respInfo) {
+    bucketManager.delete(bucket, key, function (err, respBody, respInfo) {
       if (err) {
         console.log(err);
         //throw err;
@@ -1370,6 +1392,73 @@ router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
 })
 
 /**
+ * @description 绑定邮箱
+ * @param {String} email 邮箱
+ * @return {String} SUCCESS
+ */
+router.post('/api/login/bindEmail', (req, res, next) => {
+  console.log('bindEmail')
+
+  let account = req.body.account
+  let email = req.body.email
+
+  let promise = new Promise((resolve, reject) => {
+    models.Login.findOne({'email': email}, {email: 1}, (err, data) => {
+      console.log(data)
+
+      if (err) {
+        reject(err)
+      } else {
+        if (data === null) {
+          resolve(email)
+        } else {
+          next({
+            message: config.RES_MSE.FAIL_MSG_EMAIL_REPEAT,
+            data: config.RES_DATA_MSG.FAIL_MSG,
+            code: config.RES_DATA_CODE.FAIL_CODE
+          })
+        }
+      }
+    })
+  })
+
+
+  let random = Math.floor((Math.random() + 1) * 100000);
+
+  promise.then(email => {
+    let opt = {
+      from: keyCode.emailUser, // list of receivers
+      to: email, // sender address
+      subject: "通知：绑定您的邮箱", // Subject line
+      text: "Hello world?", // plain text body
+      html: `
+    <div style="padding: 30px;margin: 10px;background-color: #fafafa;border:1px solid #e1e1e1">
+      <h2 style="color: #17a2b8;text-align: center">Find</h2>
+      <p>尊敬的用户：</p>
+      <p>下列字符为用于绑定邮箱的验证码请勿告诉他人。（有效期5分钟）</p>
+      <p style="color: #17a2b8;font-size:20px">${random}</p>
+      <p>谢谢！</p>
+      <p>Find 团队</p>
+      <p>需要帮助？</p>
+      <p>如在帐户方面需要帮助，请联系客户支持。</p>
+    </div>
+`
+    }
+
+    req.session.emailCode = random
+
+    nodemailer(opt, info => {
+      next({
+        message: config.RES_MSE.SUCCESS_MSG,
+        data: config.RES_DATA_MSG.SUCCESS_MSG,
+        code: config.RES_DATA_CODE.SUCCESS_CODE
+      })
+    }).catch(console.error)
+  })
+})
+
+
+/**
  * @description 验证邮箱发送验证码
  * @param {String} account 账号
  * @param {String} email 邮件地址
@@ -1383,7 +1472,7 @@ router.post('/api/login/checkEmail', (req, res, next) => {
 
   let time = (new Date()).valueOf().toString()
   let timeHash = Util.aesEncrypt(time, keyCode.AESKey)
-  let email_pass_code = Util.md5(uuid.v1())+ timeHash;
+  let email_pass_code = Util.md5(uuid.v1()) + timeHash;
 
   let promise = new Promise((resolve, reject) => {
     models.Login.findOne({'account': account}, {email: 1}, (err, data) => {
@@ -1439,7 +1528,7 @@ router.post('/api/login/checkEmail', (req, res, next) => {
         })
       })
     }).catch(console.error)
-  }).catch( e => {
+  }).catch(e => {
   })
 })
 
@@ -1456,7 +1545,7 @@ router.post('/api/login/changePassword', (req, res, next) => {
   let code = req.body.code
   let password = req.body.password
 
-  if (code.length < 33){
+  if (code.length < 33) {
     next({
       message: config.RES_MSE.FAIL_MSG_CODE,
       data: config.RES_DATA_MSG.FAIL_MSG,
@@ -1472,12 +1561,12 @@ router.post('/api/login/changePassword', (req, res, next) => {
         reject(err)
       } else {
         if (data.email_pass_code === codeHash) {
-          let time =  Util.aesDecrypt(code.substring(32), keyCode.AESKey)
+          let time = Util.aesDecrypt(code.substring(32), keyCode.AESKey)
 
           let codeTime = parseInt(time)
           let now = (new Date()).valueOf()
 
-          if(now - codeTime > 5*60*1000){
+          if (now - codeTime > 5 * 60 * 1000) {
             next({
               message: config.RES_MSE.FAIL_MSG_OVERTIME,
               data: config.RES_DATA_MSG.FAIL_MSG,
