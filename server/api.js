@@ -197,7 +197,7 @@ router.post('/api/login/getAuthorListById', [jwtauth], (req, res, next) => {
  * @param {String} authorId 用户ID
  * @return {Object} data 用户信息
  */
-router.post('/api/login/getAuthorInfo', [Util.getToken()], (req, res, next) => {
+router.post('/api/login/getAuthorInfo', [jwtauth], (req, res, next) => {
   // console.log('getAuthorInfo')
   let authorId = req.body.authorId
   let userId = req.userId
@@ -1404,18 +1404,19 @@ router.post('/api/login/bindEmail', (req, res, next) => {
     models.Login.findOne({'email': email}, {email: 1}, (err, data) => {
 
       if (err) {
-        reject(err)
-      } else {
-        if (data === null) {
-          resolve(email)
-        } else {
-          next({
-            message: config.RES_MSE.FAIL_MSG_EMAIL_REPEAT,
-            data: config.RES_DATA_MSG.FAIL_MSG,
-            code: config.RES_DATA_CODE.FAIL_CODE
-          })
-        }
+        Util.failHand(res, err)
+        return
       }
+      if (data === null) {
+        resolve(email)
+      } else {
+        next({
+          message: config.RES_MSE.FAIL_MSG_EMAIL_REPEAT,
+          data: config.RES_DATA_MSG.FAIL_MSG,
+          code: config.RES_DATA_CODE.FAIL_CODE
+        })
+      }
+
     })
   })
 

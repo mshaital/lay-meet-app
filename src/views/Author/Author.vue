@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <img :src="authorInfo.head_img">
+      <img :src="authorInfo.head_img || headImg">
     </div>
     <div  class="d-flex justify-content-between">
       <div class="account">{{authorInfo.nick || authorInfo.account}}</div>
@@ -59,6 +59,8 @@
 <script>
   import ArticleList from '~components/ArticleList'
   import coopService from '~modules/coopService'
+  import headImg from '~assets/img/head.png'
+
   /* eslint-disable */
   // vue use vueResource for http request.
   export default {
@@ -67,6 +69,7 @@
     },
     data () {
       return {
+        headImg,
         showMore: false,
 
         showSkeleton: true,
@@ -181,7 +184,10 @@
         let data = {authorId: this.authorId}
         const axiosConfig = { axiosShowLoading: false }
         coopService.getAuthorInfo(data, axiosConfig).then(res => {
-          if (!res) return
+          if (!res){
+            this.$toast('查询失败，请稍后再试')
+            this.$router.go(-1)
+          }
           _this.authorInfo = res
           _this.showSkeleton = false
         })

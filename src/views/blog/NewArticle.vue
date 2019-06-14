@@ -139,6 +139,10 @@
           this.Toast('不能发表空的内容')
           return false
         }
+        if (this.articleForm.content > 300) {
+          this.Toast('写的太多了 不能超过300个字')
+          return false
+        }
         let _this = this
         this.articleForm.content = xss(this.articleForm.content)
         let data = this.articleForm

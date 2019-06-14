@@ -151,7 +151,4 @@ export default {
   changePassword (params) {
     return AxiosManager.post(Apis.changePassword, params)
   },
-  ssss (params) {
-    return AxiosManager.post(Apis.ssss, params)
-  },
 }

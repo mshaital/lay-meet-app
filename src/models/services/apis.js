@@ -48,12 +48,8 @@ const bindEmail = '/api/login/bindEmail' // 绑定邮箱
 const checkEmail = '/api/login/checkEmail' // 更改密码
 const changePassword = '/api/login/changePassword' // 更改密码
 
-
 const upload = '/api/img/upload' // 查询动态
-const getImgUploadToken = '/api/upload/getToken' //
-
-const ssss = '/api/login/ssss' //
-
+const getImgUploadToken = '/api/upload/getToken' //获取上传图片凭证
 
 
 /**
@@ -106,5 +102,4 @@ export default {
 
   checkEmail,
   changePassword,
-  ssss,
 }

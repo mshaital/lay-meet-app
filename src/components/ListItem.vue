@@ -2,7 +2,7 @@
   <div class="mt-1 bg-white pt-2">
     <div class="d-flex pl-2 pr-2">
       <div class="head-img-size mr-3 d-flex" @click="goAuthor">
-        <img class="align-self-center rounded-circle img-fluid" :src="inValue.head_img || '../img/head.png'">
+        <img class="align-self-center rounded-circle img-fluid" :src="inValue.head_img || headImg">
       </div>
       <div class="w-100">
         <div class="font-18 w-100 d-flex justify-content-between position-relative">
@@ -61,6 +61,7 @@
   import coopService from '~modules/coopService'
   import cache from '~utils/cache'
   import examplePicture from '~assets/img/banner-5.png'
+  import headImg from '~assets/img/head.png'
   import AddAnimate from '~components/AddAnimate'
 
 
@@ -84,6 +85,7 @@
     },
     data () {
       return {
+        headImg,
         imgList: 9,
         showPop: false,
         isUserFollow: false,

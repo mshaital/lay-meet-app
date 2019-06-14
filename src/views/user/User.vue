@@ -8,9 +8,13 @@
     </div>
     <div  class="d-flex justify-content-between">
       <div class="account">{{userInfo.nick || userInfo.account}}</div>
-      <div class="m-3">
-        <span class="edit"><van-icon name="qr" /></span>
-        <span class="edit" @click="goSetting"><van-icon name="edit" /></span>
+      <div class="m-3 w-30 d-flex justify-content-around">
+        <div>
+          <span class="edit"><van-icon name="qr" /></span>
+        </div>
+        <div>
+          <span class="edit" @click="goSetting"><van-icon name="edit" /></span>
+        </div>
       </div>
     </div>
     <div class="ml-3 font-12 font-grey">上海</div>
