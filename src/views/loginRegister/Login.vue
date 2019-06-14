@@ -65,7 +65,7 @@
           if(!res) return
           let userInfo = res.user
           let token = res.token
-          console.log(token)
+
           _this.$store.commit('SET_USER_INFO', userInfo)
           _this.$store.commit('SET_TOKEN', token)
           _this.$router.replace('/')

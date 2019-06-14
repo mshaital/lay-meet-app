@@ -88,7 +88,7 @@
         }
         coopService.bindEmail(data).then(res => {
           if (res !== 'SUCCESS') return
-          Toast('发送成功')
+          Toast('验证码已通过邮箱发送')
         })
       },
       submit () {
@@ -105,6 +105,8 @@
           ['minLength:5', '密码不得小于5个字符', submitForm.userPass],
           ['isNoEmpty', '请填写邮件地址', submitForm.email],
           ['isEmail', '邮件地址不正确', submitForm.email],
+          ['isNoEmpty', '请填写验证码', submitForm.code],
+
 //          ['isNoEmpty', '请填写手机号', submitForm.cellPhoneNum],
 //          ['isPhoneNum', '手机号不正确', submitForm.cellPhoneNum]
         ]

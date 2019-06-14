@@ -44,6 +44,7 @@
       this.theme.innerHTML = THEME.THEME[themeClass] || THEME.THEME.day;
     },
     methods: {
+
       onClickRight () {
         this.$router.push({name: `Search`})
       },

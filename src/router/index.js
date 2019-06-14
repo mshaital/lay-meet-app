@@ -33,13 +33,17 @@ export default new Router({
     {
       path: '/',
       name: 'IndexPage',
-      component: IndexPage
+      component: IndexPage,
+      meta: {requiresAuth: true}
+
     },
     loginRegister,
     {
       path: '/HomePage',
       name: 'HomePage',
-      component: HomePage
+      component: HomePage,
+      meta: {requiresAuth: true}
+
     },
     {
       path: '/Search',

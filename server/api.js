@@ -112,7 +112,6 @@ router.post('/api/login/getAccount', (req, res, next) => {
   // console.log('getAccount')
   let userName = req.body.userName
   let userPass = req.body.userPass
-  // 5990aa005201a78fafe55c7edba1c5e9-d12e4f09a431ba6351042d3c389f42ac1d343c23b2be5c8c15c34c3dc51609bce417885427f103d32e0aa9744d91a2b5
   models.Login.findOne(
     {account: userName},
     {dynamic: 0, private_letter: 0, email_pass_code: 0},
@@ -1399,12 +1398,10 @@ router.post('/api/upload/getToken', [jwtauth], (req, res, next) => {
 router.post('/api/login/bindEmail', (req, res, next) => {
   console.log('bindEmail')
 
-  let account = req.body.account
   let email = req.body.email
 
   let promise = new Promise((resolve, reject) => {
     models.Login.findOne({'email': email}, {email: 1}, (err, data) => {
-      console.log(data)
 
       if (err) {
         reject(err)
@@ -1421,7 +1418,6 @@ router.post('/api/login/bindEmail', (req, res, next) => {
       }
     })
   })
-
 
   let random = Math.floor((Math.random() + 1) * 100000);
 
@@ -1447,13 +1443,14 @@ router.post('/api/login/bindEmail', (req, res, next) => {
 
     req.session.emailCode = random
 
-    nodemailer(opt, info => {
+    console.log(random)
+    // nodemailer(opt, info => {
       next({
         message: config.RES_MSE.SUCCESS_MSG,
         data: config.RES_DATA_MSG.SUCCESS_MSG,
         code: config.RES_DATA_CODE.SUCCESS_CODE
       })
-    }).catch(console.error)
+    // }).catch(console.error)
   })
 })
 

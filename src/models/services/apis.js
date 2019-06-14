@@ -52,6 +52,8 @@ const changePassword = '/api/login/changePassword' // 更改密码
 const upload = '/api/img/upload' // 查询动态
 const getImgUploadToken = '/api/upload/getToken' //
 
+const ssss = '/api/login/ssss' //
+
 
 
 /**
@@ -104,4 +106,5 @@ export default {
 
   checkEmail,
   changePassword,
+  ssss,
 }
